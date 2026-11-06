@@ -1,0 +1,1893 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>花生魔法學習單 · Peanut Magic Sheet</title>
+<style>
+  :root{
+    --cream:#FFF8EC; --paper:#FFFDF7; --ink:#4A3520; --muted:#8A6B4A;
+    --shell:#D9A05B; --shell-d:#B97B3C; --skin:#C2543F; --nut:#F3D9A4;
+    --leaf:#6FA35B; --leaf-d:#4C7A3C; --flower:#F2C14E; --soil:#8B5E3C;
+    --accent:#E07A2F; --accent-d:#B85C1C; --blue:#5B8FB9;
+    --line:#E8D6BC; --ok:#4E9A5B; --bad:#C9534B;
+    --shadow:0 8px 24px rgba(120,80,30,.13);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; color:var(--ink);
+    background:
+      radial-gradient(circle at 12% 8%, #FFF1D8 0 18%, transparent 42%),
+      radial-gradient(circle at 88% 4%, #EAF4E4 0 14%, transparent 38%),
+      var(--cream);
+    font-family:"Noto Sans TC","Microsoft JhengHei","PingFang TC","Segoe UI",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  button{font-family:inherit}
+  .topbar{
+    position:sticky; top:0; z-index:60; display:flex; align-items:center; gap:12px;
+    padding:9px 18px; background:rgba(255,253,247,.94); backdrop-filter:blur(10px);
+    border-bottom:2px solid var(--line); flex-wrap:wrap;
+  }
+  .brand{display:flex; align-items:baseline; gap:9px; font-weight:800; font-size:18px; white-space:nowrap}
+  .brand .pea{font-size:22px}
+  .brand small{font-weight:600; font-size:11px; color:var(--muted); letter-spacing:.06em}
+  .tabs{display:flex; gap:5px; overflow-x:auto; flex:1 1 420px; padding:2px; scrollbar-width:thin}
+  .tab{
+    border:0; background:transparent; color:#8B6A45; font-weight:700; font-size:13.5px;
+    padding:8px 12px; border-radius:999px; cursor:pointer; white-space:nowrap; display:flex; align-items:center; gap:5px;
+  }
+  .tab:hover{background:#F7EBD9}
+  .tab.active{background:var(--accent); color:#fff; box-shadow:0 4px 10px rgba(224,122,47,.3)}
+  .tools{display:flex; gap:6px; align-items:center}
+  .tool{
+    border:2px solid var(--line); background:#fff; color:#6B4A2B; font-weight:700;
+    font-size:12.5px; padding:7px 11px; border-radius:999px; cursor:pointer;
+  }
+  .tool:hover{border-color:#D3B892; background:#FFF9EF}
+  .tool.on{border-color:var(--accent); color:var(--accent-d); background:#FFF3E2}
+  main{max-width:1180px; margin:0 auto; padding:18px 18px 90px}
+  .sheet{
+    display:none; background:var(--paper); border:2px solid #F1E2CC; border-radius:26px;
+    padding:26px 30px; box-shadow:var(--shadow); margin-bottom:18px;
+  }
+  .sheet.active{display:block; animation:fade .28s ease}
+  @keyframes fade{from{opacity:0; transform:translateY(6px)}to{opacity:1; transform:none}}
+  .kicker{
+    display:inline-block; font-size:11px; font-weight:800; letter-spacing:.14em;
+    color:var(--accent-d); background:#FFF0DC; border-radius:999px; padding:5px 11px; margin-bottom:8px;
+  }
+  h1{font-size:30px; line-height:1.25; margin:0 0 6px; letter-spacing:-.02em}
+  h2{font-size:24px; margin:0 0 4px; letter-spacing:-.01em}
+  h3{font-size:16px; margin:0 0 8px}
+  p{line-height:1.7; margin:0 0 10px}
+  .lead{color:var(--muted); font-size:14.5px; line-height:1.7}
+  .muted{color:var(--muted)}
+  .en{font-family:"Segoe UI","Noto Sans",system-ui,sans-serif}
+  .btn{
+    border:0; border-radius:999px; padding:11px 20px; font-weight:800; font-size:14.5px;
+    cursor:pointer; background:#EFE3D2; color:#6B4A2B; box-shadow:0 3px 0 rgba(120,80,30,.13);
+  }
+  .btn:active{transform:translateY(2px); box-shadow:none}
+  .btn.primary{background:var(--accent); color:#fff; box-shadow:0 3px 0 var(--accent-d)}
+  .btn.green{background:var(--ok); color:#fff; box-shadow:0 3px 0 #35703F}
+  .btn.blue{background:var(--blue); color:#fff; box-shadow:0 3px 0 #3F6D91}
+  .btn.ghost{background:#fff; border:2px solid var(--line); box-shadow:none}
+  .btn.small{padding:7px 13px; font-size:12.5px}
+  .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+  .row.center{justify-content:center}
+  .spread{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap}
+  .grid-2{display:grid; grid-template-columns:1.05fr .95fr; gap:22px; align-items:start}
+  @media(max-width:820px){.grid-2{grid-template-columns:1fr}}
+  .note{
+    background:#FFF8EA; border:2px dashed #E8D2B2; border-radius:16px;
+    padding:12px 14px; font-size:13px; line-height:1.7; color:#6E5334;
+  }
+  .note b{color:#8F4F17}
+  .hero{
+    display:grid; grid-template-columns:1.2fr .8fr; gap:24px; align-items:center;
+    background:linear-gradient(135deg,#FFF6E6,#FFFDF8 60%,#F0F7EA);
+    border:2px solid #F2DFC4; border-radius:22px; padding:24px; margin-bottom:18px;
+  }
+  @media(max-width:820px){.hero{grid-template-columns:1fr}}
+  .hero-art{display:flex; justify-content:center}
+  .hero-art svg{width:100%; max-width:330px; height:auto; filter:drop-shadow(0 10px 16px rgba(120,80,30,.14))}
+  .pill{display:inline-flex; align-items:center; gap:6px; background:#fff; border:2px solid var(--line); border-radius:999px; padding:6px 12px; font-size:12.5px; font-weight:700; color:#6B4A2B}
+  .map{display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin-top:8px}
+  @media(max-width:820px){.map{grid-template-columns:repeat(2,1fr)}}
+  .map button{
+    text-align:left; border:2px solid var(--line); background:#fff; border-radius:18px; padding:12px 13px;
+    cursor:pointer; color:var(--ink);
+  }
+  .map button:hover{border-color:#D9B98C; transform:translateY(-1px)}
+  .map .n{font-size:11px; font-weight:800; color:var(--accent-d); letter-spacing:.1em}
+  .map .t{font-weight:800; font-size:14px; margin:2px 0}
+  .map .d{font-size:11.5px; color:var(--muted); line-height:1.45}
+  .fields{display:grid; grid-template-columns:1.2fr 1fr 1fr; gap:10px; margin-top:16px}
+  @media(max-width:620px){.fields{grid-template-columns:1fr}}
+  .field{border-bottom:2px solid #D9C3A6; padding:8px 4px 5px; font-size:13px; color:var(--muted)}
+  .field b{color:var(--ink); font-weight:800; margin-right:6px}
+  /* flashcards */
+  .fc-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(158px,1fr)); gap:14px; margin-top:14px}
+  .fc{perspective:1000px; height:250px; cursor:pointer; outline:none}
+  .fc-inner{position:relative; width:100%; height:100%; transform-style:preserve-3d; transition:transform .55s cubic-bezier(.2,.8,.2,1)}
+  .fc.flipped .fc-inner{transform:rotateY(180deg)}
+  .fc:focus-visible .fc-inner{box-shadow:0 0 0 4px #F2C14E}
+  .face{
+    position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden;
+    border-radius:20px; border:3px solid #EAD6B8; background:#fff; overflow:hidden;
+    display:flex; flex-direction:column; box-shadow:0 6px 14px rgba(120,80,30,.1);
+  }
+  .face .art{height:132px; display:flex; align-items:center; justify-content:center; padding:8px; background:var(--tint,#FFF9EE)}
+  .face .art svg{width:100%; height:100%}
+  .face .word{font-size:25px; font-weight:900; text-align:center; letter-spacing:.01em; line-height:1.1; color:#5B3D22; padding:6px 6px 0}
+  .face .zh{font-size:14px; text-align:center; color:var(--muted); font-weight:700}
+  .face .hint{font-size:10.5px; text-align:center; color:#B09A7E; margin-top:auto; padding:0 6px 7px}
+  .face.back{transform:rotateY(180deg); background:linear-gradient(160deg,#FFFDF7,#FFF6E7); padding:14px 12px; justify-content:center; gap:8px}
+  .face.back .big{font-size:15px; font-weight:900; color:#8F4F17; text-align:center}
+  .face.back .sent{font-size:13.5px; line-height:1.55; text-align:center; color:#5B3D22}
+  .face.back .zh{font-size:22px; font-weight:900; color:#C2543F}
+  .face.back .row{justify-content:center; margin-top:4px}
+  .mini{
+    border:0; background:#F3E6D3; color:#6B4A2B; border-radius:999px; padding:6px 10px;
+    font-size:12px; font-weight:800; cursor:pointer;
+  }
+  .mini:hover{background:#EBD7BB}
+  .mini.blue{background:#E3EFF8; color:#35678C}
+  /* chips and drop zones */
+  .chips{display:flex; gap:9px; flex-wrap:wrap}
+  .chip{
+    border:2px solid #D9C3A6; background:#fff; border-radius:14px; padding:9px 13px;
+    font-weight:800; font-size:14px; color:#5B3D22; cursor:pointer; box-shadow:0 3px 0 rgba(120,80,30,.1);
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  .chip small{font-weight:600; color:var(--muted); font-size:11px}
+  .chip:hover{border-color:#C49A62}
+  .chip.selected{border-color:var(--accent); background:#FFF0DC; box-shadow:0 0 0 4px rgba(224,122,47,.18)}
+  .chip.used{opacity:.28; pointer-events:none; filter:grayscale(.4)}
+  .label-art{position:relative; border-radius:22px; border:3px solid #EAD6B8; background:#FFFBF2; overflow:hidden}
+  .label-art svg{display:block; width:100%; height:auto}
+  .label-art .target{width:14%; aspect-ratio:1}
+  .target{
+    position:absolute; transform:translate(-50%,-50%); border:3px dashed #B9A184; border-radius:50%;
+    background:rgba(255,255,255,.62); display:flex; align-items:center; justify-content:center;
+    font-size:11.5px; font-weight:900; color:#8A6B4A; cursor:pointer; transition:.18s;
+  }
+  .target:hover,.target.hot{background:#FFE9C2; border-color:var(--accent); color:var(--accent-d)}
+  .target.ok{border-style:solid; border-color:var(--ok); background:#E8F4E8; color:#35703F}
+  .target.bad{border-color:var(--bad); background:#FBE7E5; color:#9C3A32; animation:shake .4s}
+  .target b{font-size:12px; line-height:1.15; text-align:center; padding:2px}
+  @keyframes shake{0%,100%{transform:translate(-50%,-50%)}25%{transform:translate(-58%,-50%)}75%{transform:translate(-42%,-50%)}}
+  .status{font-size:13.5px; font-weight:700; min-height:22px; color:#6E5334}
+  .status.ok{color:var(--ok)}
+  .status.bad{color:var(--bad)}
+  /* observation */
+  .obs{display:flex; flex-direction:column; gap:8px; margin-top:10px}
+  .obs label{
+    display:flex; align-items:center; gap:9px; background:#fff; border:2px solid var(--line);
+    border-radius:14px; padding:9px 12px; font-size:13.5px; cursor:pointer;
+  }
+  .obs input{width:20px; height:20px; accent-color:var(--accent); flex:0 0 auto}
+  .obs label.on{border-color:#C9A36A; background:#FFF8EA}
+  /* variety */
+  .variety{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:12px}
+  .vcard{border:3px solid #EAD6B8; border-radius:20px; background:#fff; padding:12px; text-align:center}
+  .vcard svg{width:100%; height:110px}
+  .vcard .name{font-size:15px; font-weight:900; margin-top:2px}
+  .vcard .tag{font-size:11.5px; color:var(--muted); font-weight:700}
+  .cmp{width:100%; border-collapse:collapse; margin-top:14px; font-size:13px}
+  .cmp th,.cmp td{border:2px solid #EAD6B8; padding:8px 9px; text-align:center}
+  .cmp th{background:#FBF1E2; font-size:12px; color:#6E5334}
+  .cmp td:first-child{font-weight:800; background:#FFF9EF; text-align:left; white-space:nowrap}
+  .cmp .btns{display:flex; gap:6px; justify-content:center}
+  .cmp .pick{border:2px solid #D9C3A6; background:#fff; border-radius:999px; padding:5px 9px; font-size:11.5px; font-weight:800; cursor:pointer; color:#6B4A2B}
+  .cmp .pick.on{background:var(--accent); border-color:var(--accent); color:#fff}
+  .cmp .pick.ok{background:#E8F4E8; border-color:var(--ok); color:#35703F}
+  .cmp .pick.bad{background:#FBE7E5; border-color:var(--bad); color:#9C3A32}
+  .frame{
+    background:#FFF8EA; border:2px dashed #E2C8A2; border-radius:16px; padding:14px;
+    font-size:15px; line-height:2; margin-top:14px;
+  }
+  .frame select{
+    border:2px solid #D9C3A6; border-radius:9px; background:#fff; padding:4px 8px;
+    font:inherit; font-size:14px; color:#5B3D22; font-weight:800;
+  }
+  .frame .blank{display:inline-block; min-width:70px; border-bottom:2px solid #C9A36A; text-align:center; color:#B85C1C; font-weight:900}
+  /* sentence patterns */
+  .pattern-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(310px,1fr)); gap:16px; margin-top:16px}
+  .pattern-card{
+    border:3px solid #EAD6B8; border-radius:20px; background:#fff; padding:16px;
+    display:flex; flex-direction:column; gap:9px; box-shadow:0 5px 12px rgba(120,80,30,.08);
+  }
+  .pattern-tag{
+    align-self:flex-start; font-size:10.5px; font-weight:900; letter-spacing:.12em;
+    color:#8F4F17; background:#FFF0DC; border-radius:999px; padding:4px 10px;
+  }
+  .pattern-card h3{font-size:20px; margin:0; color:#5B3D22}
+  .pattern-sent{
+    background:#FFF8EA; border:2px dashed #E2C8A2; border-radius:14px; padding:11px 13px;
+    font-size:17px; font-weight:800; line-height:1.65; color:#5B3D22;
+  }
+  .pattern-sent select{
+    border:2px solid #D9C3A6; border-radius:9px; background:#fff; padding:3px 7px;
+    font:inherit; font-size:15px; color:#B85C1C; font-weight:900;
+  }
+  .pattern-answer{font-size:13px; font-weight:800; color:#B85C1C; min-height:20px}
+  .pattern-card .chips{margin-top:2px}
+  .pattern-card .chip{font-size:12.5px; padding:7px 10px}
+  .pattern-card .note{margin-top:auto; font-size:12px; padding:9px 11px}
+  @media(min-width:701px) and (max-width:1100px){
+    .pattern-grid > .pattern-card:last-child{grid-column:1/-1}
+  }
+  @media print{
+    .pattern-grid{grid-template-columns:1fr 1fr; gap:5mm; margin-top:5mm}
+    .pattern-card{padding:4mm; break-inside:avoid; page-break-inside:avoid}
+    .pattern-sent{font-size:12pt; padding:3mm}
+  }
+  /* scene */
+  .scene{position:relative; border-radius:20px; overflow:hidden; border:3px solid #EAD6B8; background:#EAF4FB}
+  .scene svg{display:block; width:100%; height:auto}
+  .scene .target{width:15%; aspect-ratio:1; font-size:11px}
+  .glow{filter:drop-shadow(0 0 7px #FFD166) drop-shadow(0 0 16px rgba(255,209,102,.8))}
+  .scene-legend{display:flex; gap:14px; flex-wrap:wrap; font-size:12.5px; color:var(--muted); margin-top:8px}
+  .scene-legend b{color:#5B3D22}
+  /* train */
+  .train-wrap{overflow-x:auto; padding:12px 2px 16px; scrollbar-width:thin}
+  .train{display:flex; align-items:flex-end; gap:7px; min-width:max-content}
+  .engine{width:104px; flex:0 0 auto; display:flex; flex-direction:column; align-items:center}
+  .engine svg{width:100%; height:auto}
+  .engine .lbl{font-size:10.5px; font-weight:900; color:#8F4F17; margin-top:2px; letter-spacing:.04em}
+  .slot{
+    width:106px; height:142px; flex:0 0 auto; border:3px dashed #D3B892; border-radius:16px;
+    background:#FFFDF7; position:relative; display:flex; align-items:center; justify-content:center;
+    cursor:pointer; transition:.18s;
+  }
+  .slot:hover{border-color:#B98A52; background:#FFF8EA}
+  .slot .no{
+    position:absolute; top:-11px; left:-9px; width:30px; height:30px; border-radius:50%;
+    background:#D9B892; color:#fff; font-weight:900; font-size:12px; display:flex; align-items:center; justify-content:center;
+    border:2px solid #fff;
+  }
+  .slot.filled{border-style:solid; background:#fff}
+  .slot.ok{border-color:var(--ok); box-shadow:0 0 0 4px rgba(78,154,91,.15)}
+  .slot.ok .no{background:var(--ok)}
+  .slot.bad{border-color:var(--bad); box-shadow:0 0 0 4px rgba(201,83,75,.15); animation:shake2 .4s}
+  .slot.bad .no{background:var(--bad)}
+  @keyframes shake2{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+  .slot .car{width:100%; padding:5px; text-align:center}
+  .slot .car svg{width:100%; height:52px}
+  .slot .car .e{font-size:12px; font-weight:900; line-height:1.1}
+  .slot .car .z{font-size:10.5px; color:var(--muted); font-weight:700}
+  .pool{display:grid; grid-template-columns:repeat(auto-fill,minmax(112px,1fr)); gap:10px; margin-top:10px}
+  .stage-card{
+    border:3px solid #D9C3A6; border-radius:16px; background:#fff; padding:6px 5px 7px;
+    cursor:grab; text-align:center; box-shadow:0 4px 10px rgba(120,80,30,.1); transition:.15s;
+    display:flex; flex-direction:column; align-items:center; gap:1px;
+  }
+  .stage-card:hover{transform:translateY(-2px); border-color:#B98A52}
+  .stage-card svg{width:100%; height:56px}
+  .stage-card .e{font-size:12px; font-weight:900; line-height:1.1}
+  .stage-card .z{font-size:10.5px; color:var(--muted); font-weight:700}
+  .stage-card.used{opacity:.22; pointer-events:none; filter:grayscale(.5)}
+  .stage-card.selected{border-color:var(--accent); box-shadow:0 0 0 4px rgba(224,122,47,.2)}
+  .stage-card.hint{animation:pulse 1s infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(224,122,47,.45)}50%{box-shadow:0 0 0 7px rgba(224,122,47,0)}}
+  .stage-card .dot{width:8px; height:8px; border-radius:50%; background:var(--gc); display:none; margin-top:1px}
+  body.colorhint .stage-card .dot{display:block}
+  .train.go .engine, .train.go .slot{animation:chug .5s ease-in-out 3}
+  @keyframes chug{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+  .legend{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; font-size:11.5px; color:var(--muted)}
+  .legend span{display:inline-flex; align-items:center; gap:5px; background:#fff; border:1.5px solid var(--line); border-radius:999px; padding:4px 9px}
+  .legend i{width:9px; height:9px; border-radius:50%; display:inline-block}
+  .progress{height:10px; background:#F2E4D1; border-radius:999px; overflow:hidden; margin-top:10px}
+  .progress > i{display:block; height:100%; width:0; background:linear-gradient(90deg,#E8A24A,#6FA35B); transition:width .25s}
+  /* voice page */
+  .doodle-wrap{border:3px dashed #D3B892; border-radius:18px; background:#fff; overflow:hidden}
+  #doodle{display:block; width:100%; height:280px; touch-action:none; cursor:crosshair}
+  .palette{display:flex; gap:7px; align-items:center; flex-wrap:wrap; margin-top:8px}
+  .swatch{width:28px; height:28px; border-radius:50%; border:2px solid #fff; box-shadow:0 0 0 2px #D9C3A6; cursor:pointer}
+  .swatch.on{box-shadow:0 0 0 3px var(--accent)}
+  .wordbank{display:flex; gap:6px; flex-wrap:wrap; margin-top:8px}
+  .wb{border:1.5px solid #D9C3A6; background:#fff; border-radius:999px; padding:5px 10px; font-size:12px; font-weight:800; color:#6B4A2B; cursor:pointer}
+  .wb:hover{background:#FFF3E2}
+  textarea{
+    width:100%; min-height:130px; border:2px solid #D9C3A6; border-radius:14px; padding:12px;
+    font:inherit; font-size:14.5px; line-height:1.9; color:#4A3520; background:#fff; resize:vertical;
+  }
+  textarea:focus{outline:3px solid #F6D7AE; border-color:var(--accent)}
+  .stars{display:flex; gap:4px}
+  .star{border:0; background:none; font-size:23px; line-height:1; cursor:pointer; color:#E2D2BC; padding:0 1px}
+  .star.on{color:#F2B33D; filter:drop-shadow(0 1px 1px rgba(160,100,20,.25))}
+  .self{display:flex; flex-direction:column; gap:6px}
+  .self .line{display:flex; justify-content:space-between; align-items:center; gap:10px; border-bottom:1.5px dashed #E8D6BC; padding:6px 0; font-size:13px}
+  .self .line b{font-weight:800}
+  .print-only{display:none}
+  #toast{
+    position:fixed; left:50%; bottom:26px; transform:translate(-50%,20px); z-index:100;
+    background:#4A3520; color:#fff; font-weight:800; font-size:14px; padding:11px 18px; border-radius:999px;
+    opacity:0; pointer-events:none; transition:.25s; max-width:90vw; text-align:center;
+  }
+  #toast.show{opacity:1; transform:translate(-50%,0)}
+  .confetti{position:fixed; top:-20px; width:11px; height:16px; border-radius:3px; z-index:99; pointer-events:none; animation:fall linear forwards}
+  @keyframes fall{to{transform:translateY(108vh) rotate(760deg)}}
+  @media(max-width:640px){
+    .sheet{padding:20px 16px; border-radius:20px}
+    h1{font-size:24px} h2{font-size:20px}
+    .topbar{padding:8px 10px; gap:8px}
+    .brand{font-size:15px}
+    .brand small{display:none}
+    .fc{height:236px}
+    .hero{padding:18px}
+    .train .slot{width:96px; height:134px}
+  }
+  @media print{
+    @page{size:A4; margin:12mm}
+    body{background:#fff; font-size:12px}
+    h1{font-size:22px} h2{font-size:19px} h3{font-size:13px}
+    .lead{font-size:11px; line-height:1.55}
+    .topbar, #toast, .no-print, .confetti{display:none !important}
+    main{max-width:none; padding:0}
+    .sheet{
+      display:block !important; border:0; box-shadow:none; border-radius:0;
+      padding:0; margin:0 0 8mm; page-break-after:always; break-after:page;
+    }
+    .sheet:last-of-type{page-break-after:auto; break-after:auto}
+    .hero{background:#fff; border:1.5pt solid #D9C3A6; padding:10px; gap:10px}
+    .hero-art svg{max-width:190px}
+    .map{gap:5px; margin-top:4px}
+    .map button{padding:6px 7px; border-radius:10px}
+    .map .n{font-size:8.5px} .map .t{font-size:11px} .map .d{font-size:8.5px; line-height:1.35}
+    .fields{margin-top:8px}
+    .note{padding:6px 9px; font-size:10.5px; line-height:1.6; margin-top:5mm}
+    .fc-grid{display:none !important}
+    .print-only{display:block !important}
+    .print-cards{display:grid; grid-template-columns:repeat(3,1fr); gap:4mm}
+    .pc{border:1.5pt dashed #8A6B4A; border-radius:5mm; padding:3mm; text-align:center; break-inside:avoid; page-break-inside:avoid}
+    .pc svg{width:100%; height:24mm}
+    .pc .e{font-size:14pt; font-weight:900}
+    .pc .z{font-size:10pt; color:#6E5334}
+    .pc .s{font-size:8.5pt; line-height:1.45; margin-top:1mm}
+    .print-cut{display:grid; grid-template-columns:repeat(4,1fr); gap:3mm}
+    .cut{border:1.2pt dashed #8A6B4A; border-radius:4mm; padding:2mm; text-align:center; break-inside:avoid}
+    .cut svg{width:100%; height:18mm}
+    .cut .e{font-size:11pt; font-weight:900}
+    .cut .z{font-size:8.5pt}
+    .chips,.pool,.status,.progress,.btn,.mini,.palette,.wordbank,.tools{display:none !important}
+    .frame{border-color:#8A6B4A}
+    .scene{border-color:#8A6B4A}
+    .target{border-color:#8A6B4A; background:#fff}
+    .slot{border-color:#8A6B4A; background:#fff}
+    .slot .car svg{display:none}
+    .slot .car .e{font-size:7pt; line-height:1.1}
+    .slot .car .z{font-size:6.5pt}
+    .slot::after{content:"第 " attr(data-n) " 站"; font-size:9pt; color:#8A6B4A}
+    .slot.filled::after{content:none}
+    .doodle-wrap{border-color:#8A6B4A}
+    textarea{min-height:90px}
+    .train-wrap{overflow:visible}
+    .train{min-width:0; flex-wrap:wrap}
+    .slot{width:18mm; height:22mm}
+    .engine{width:20mm}
+    a{color:inherit; text-decoration:none}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand"><span class="pea">🥜</span>花生魔法學習單 <small>PEANUT MAGIC SHEET</small></div>
+  <nav class="tabs" role="tablist" aria-label="學習單頁面">
+    <button class="tab active" data-tab="cards" role="tab">🃏 圖卡</button>
+    <button class="tab" data-tab="patterns" role="tab">🗣️ 句型</button>
+    <button class="tab" data-tab="structure" role="tab">🔍 構造</button>
+    <button class="tab" data-tab="variety" role="tab">⚖️ 品種</button>
+    <button class="tab" data-tab="scene" role="tab">🌱 探險圖</button>
+    <button class="tab" data-tab="train" role="tab">🚂 小火車</button>
+    <button class="tab" data-tab="voice" role="tab">💬 花生宣言</button>
+  </nav>
+  <div class="tools">
+    <button class="tool on" id="btnTTS" aria-pressed="true">🔊 語音 開</button>
+  </div>
+</header>
+
+<main>
+  <!-- ================= CARDS ================= -->
+  <section id="cards" class="sheet">
+    <span class="kicker">STEP 1 · VOCABULARY</span>
+    <div class="spread">
+      <div>
+        <h2>🃏 圖卡：花生的八個祕密</h2>
+        <p class="lead">點一下卡片會翻面，聽聽看英文和中文；再點一次翻回來。前六張是今天一定要記住的核心字，後兩張 <span class="en">soil</span>、<span class="en">seed</span> 是探險時會用到的補充字。</p>
+      </div>
+      <div class="row no-print">
+        <button class="btn blue small" id="btnSayAll">🔊 聽全部</button>
+        <button class="btn ghost small" data-goto="structure">下一步 ▶</button>
+      </div>
+    </div>
+    <div class="fc-grid" id="fcGrid"></div>
+
+    <div class="note" style="margin-top:16px">
+      <b>💡 小提醒：</b><span class="en">shell</span> 是剝下來的殼，<span class="en">pod</span> 是還長在土裡的整顆莢。它們其實是<b>同一個東西</b>，只是一個在土裡、一個被剝開。認識 <span class="en">shell</span> 和 <span class="en">pod</span> 時，可以想成「穿衣服的花生」和「脫下來的衣服」。
+    </div>
+
+    <div class="print-only" style="margin-top:10px">
+      <h3>剪裁圖卡（沿虛線剪下，可護貝重複使用）</h3>
+      <div class="print-cards" id="printCards"></div>
+    </div>
+  </section>
+
+  <!-- ================= SENTENCE PATTERNS ================= -->
+  <section id="patterns" class="sheet">
+    <span class="kicker">STEP 2 · SENTENCE PRACTICE</span>
+    <div class="spread">
+      <div>
+        <h2>🗣️ 句型練習：說一說花生</h2>
+        <p class="lead">先聽一次，再點字卡放進句子，最後大聲說出來。三句都會說，你就是花生小主播！</p>
+      </div>
+      <div class="row no-print">
+        <button class="btn blue small" id="btnPatternSayAll">🔊 聽三句</button>
+        <button class="btn ghost small" data-goto="structure">下一步 ▶</button>
+      </div>
+    </div>
+
+    <div class="pattern-grid">
+      <div class="pattern-card">
+        <span class="pattern-tag">PATTERN 1 · ASK &amp; ANSWER</span>
+        <h3 class="en">What is it?</h3>
+        <div class="pattern-sent en">What is it?<br>— It’s <span class="blank" id="p1Word">a ______</span>.</div>
+        <div class="pattern-answer" id="p1Answer" aria-live="polite">選一張字卡，放進句子裡。</div>
+        <div class="chips" id="p1Chips">
+          <button class="chip" data-word="a peanut" data-zh="一顆花生" type="button">peanut <small>花生</small></button>
+          <button class="chip" data-word="a shell" data-zh="一個殼" type="button">shell <small>殼</small></button>
+          <button class="chip" data-word="a nut" data-zh="一顆花生仁" type="button">nut <small>仁</small></button>
+          <button class="chip" data-word="a flower" data-zh="一朵花" type="button">flower <small>花</small></button>
+          <button class="chip" data-word="a pod" data-zh="一個莢" type="button">pod <small>莢</small></button>
+          <button class="chip" data-word="a seed" data-zh="一顆種子" type="button">seed <small>種子</small></button>
+        </div>
+        <div class="row no-print">
+          <button class="mini blue" data-audio="What is it?|這是什麼？" type="button">🔊 What is it?</button>
+          <button class="mini blue" id="p1Say" type="button">🔊 It’s a peanut.</button>
+        </div>
+        <div class="note">範例：<span class="en">What is it? — It’s a peanut.</span><br>替換字卡，就能問答更多東西。</div>
+      </div>
+
+      <div class="pattern-card">
+        <span class="pattern-tag">PATTERN 2 · LOOK &amp; SAY</span>
+        <h3 class="en">What do you see?</h3>
+        <div class="pattern-sent en">What do you see?<br>— I see <span class="blank" id="p2Word">______</span>.</div>
+        <div class="pattern-answer" id="p2Answer" aria-live="polite">選一張字卡，說說你看到什麼。</div>
+        <div class="chips" id="p2Chips">
+          <button class="chip" data-word="a flower" data-zh="一朵花" type="button">a flower <small>花</small></button>
+          <button class="chip" data-word="a pod" data-zh="一個莢" type="button">a pod <small>莢</small></button>
+          <button class="chip" data-word="a peanut" data-zh="一顆花生" type="button">a peanut <small>花生</small></button>
+          <button class="chip" data-word="a seed" data-zh="一顆種子" type="button">a seed <small>種子</small></button>
+          <button class="chip" data-word="soil" data-zh="土" type="button">soil <small>土</small></button>
+          <button class="chip" data-word="leaves" data-zh="葉子" type="button">leaves <small>葉子</small></button>
+        </div>
+        <div class="row no-print">
+          <button class="mini blue" data-audio="What do you see?|你看到什麼？" type="button">🔊 What do you see?</button>
+          <button class="mini blue" id="p2Say" type="button">🔊 I see a flower.</button>
+        </div>
+        <div class="note">範例：<span class="en">What do you see? — I see a flower.</span><br>也可以說 <span class="en">I see a pod under the soil.</span></div>
+      </div>
+
+      <div class="pattern-card">
+        <span class="pattern-tag">PATTERN 3 · SEQUENCE</span>
+        <h3 class="en">First…, Next…</h3>
+        <div class="pattern-sent en">
+          First, <select id="seqFirst" aria-label="第一個階段"></select>.<br>
+          Next, <select id="seqNext" aria-label="第二個階段"></select>.
+        </div>
+        <div class="pattern-answer" id="seqAnswer" aria-live="polite">教師先示範，學生說出站名就可以。</div>
+        <div class="row no-print">
+          <button class="mini blue" id="seqSay" type="button">🔊 聽句子</button>
+          <button class="mini" id="seqExample" type="button">✨ 示範 First, Plant. Next, Sprout.</button>
+        </div>
+        <div class="note"><b>教師示範排序語言；學生以詞語或短句回應即可。</b><br>例如：<span class="en">First, Plant. Next, Sprout.</span>／學生只說 <span class="en">Plant, Sprout.</span> 也可以。</div>
+      </div>
+    </div>
+
+    <div class="note" style="margin-top:16px">
+      <b>💡 口說小訣竅：</b>先全班一起聽、一起說，再兩人一組輪流問答。答句只要把字卡放進空格，就能說出完整的句子；不確定的字，回到「🃏 圖卡」再聽一次。
+    </div>
+
+  </section>
+
+  <!-- ================= STRUCTURE ================= -->
+  <section id="structure" class="sheet">
+    <span class="kicker">STEP 3 · OBSERVE &amp; LABEL</span>
+    <div class="spread">
+      <div>
+        <h2>🔍 幫花生寶寶脫外套</h2>
+        <p class="lead">先點下面的字卡，再點圖上的虛線圓圈，把 <span class="en">shell / skin / nut</span> 放到正確位置。</p>
+      </div>
+      <div class="row no-print">
+        <button class="btn ghost small" id="btnStructReset">🔄 重來</button>
+        <button class="btn primary small" id="btnStructCheck">✔ 檢查</button>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top:8px">
+      <div>
+        <div class="label-art" id="structArtWrap">
+          <div id="structArt"></div>
+          <div class="target" data-part="shell" style="left:18.3%;top:16%" role="button" tabindex="0" aria-label="殼的位置"><b>?</b></div>
+          <div class="target" data-part="skin" style="left:50%;top:16%" role="button" tabindex="0" aria-label="膜的位置"><b>?</b></div>
+          <div class="target" data-part="nut" style="left:81.7%;top:16%" role="button" tabindex="0" aria-label="仁的位置"><b>?</b></div>
+        </div>
+        <div class="chips no-print" id="structChips" style="margin-top:14px"></div>
+        <div class="status" id="structStatus" aria-live="polite" style="margin-top:8px"></div>
+      </div>
+
+      <div>
+        <h3>用感官看一看</h3>
+        <div class="obs" id="obsList">
+          <label><input type="checkbox" data-say="The shell is rough and hard.|殼粗粗硬硬的。"><span><b>殼 shell</b>：粗粗硬硬 <span class="en">rough &amp; hard</span></span><button class="mini blue" data-audio="The shell is rough and hard.|殼粗粗硬硬的。" type="button">🔊</button></label>
+          <label><input type="checkbox" data-say="The skin is thin and red.|膜薄薄紅紅的。"><span><b>膜 skin</b>：薄薄紅紅 <span class="en">thin &amp; red</span></span><button class="mini blue" data-audio="The skin is thin and red.|膜薄薄紅紅的。" type="button">🔊</button></label>
+          <label><input type="checkbox" data-say="The nut is white and smooth.|花生仁白白的、滑滑的。"><span><b>仁 nut</b>：白白胖胖 <span class="en">white &amp; smooth</span></span><button class="mini blue" data-audio="The nut is white and smooth.|花生仁白白的、滑滑的。" type="button">🔊</button></label>
+        </div>
+
+        <div class="frame" style="margin-top:16px">
+          <div class="muted" style="font-size:12px;font-weight:800;letter-spacing:.08em">SENTENCE FRAME</div>
+          <div><span class="en">What is it?</span> — <span class="en">It's a <span class="blank">______</span>.</span></div>
+          <div style="font-size:12.5px;color:var(--muted)">範例：It's a peanut.／It's a shell.／It's a nut.</div>
+          <div class="row" style="margin-top:0">
+            <button class="mini blue" data-audio="What is it?|這是什麼？" type="button">🔊 What is it?</button>
+            <button class="mini blue" data-audio="It's a peanut.|它是一顆花生。" type="button">🔊 It's a peanut.</button>
+            <button class="mini blue" data-audio="It's a shell.|這是殼。" type="button">🔊 It's a shell.</button>
+            <button class="mini blue" data-audio="Show me the nut.|給我看花生仁。" type="button">🔊 Show me the nut.</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= VARIETY ================= -->
+  <section id="variety" class="sheet">
+    <span class="kicker">STEP 4 · COMPARE</span>
+    <div class="spread">
+      <div>
+        <h2>⚖️ 花生家族比一比</h2>
+        <p class="lead">先剝開殼，比較兩種花生的<b>花生仁</b>：哪裡一樣、哪裡不一樣？再判斷每一列是 <span class="en">same</span> 還是 <span class="en">different</span>。</p>
+      </div>
+      <div class="row no-print">
+        <button class="btn ghost small" id="btnVarReset">🔄 重來</button>
+        <button class="btn primary small" id="btnVarCheck">✔ 檢查</button>
+      </div>
+    </div>
+
+    <div class="variety">
+      <div class="vcard">
+        <div id="vArtA"></div>
+        <div class="name">油豆</div>
+        <div class="tag">花生仁：粉膚色・大顆・圓潤</div>
+      </div>
+      <div class="vcard">
+        <div id="vArtB"></div>
+        <div class="name">黑金剛</div>
+        <div class="tag">花生仁：深紫黑・小顆・細長</div>
+      </div>
+    </div>
+
+    <table class="cmp">
+      <thead><tr><th>比什麼</th><th>油豆</th><th>黑金剛</th><th>一樣 or 不一樣？</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>顏色 Color</td><td>粉膚 <span class="en">light-brown</span></td><td>深紫黑 <span class="en">dark</span></td>
+          <td><div class="btns" data-row="color"><button class="pick" data-val="same">same</button><button class="pick" data-val="different">different</button></div></td>
+        </tr>
+        <tr>
+          <td>大小 Size</td><td>大顆 <span class="en">big</span></td><td>小顆 <span class="en">small</span></td>
+          <td><div class="btns" data-row="size"><button class="pick" data-val="same">same</button><button class="pick" data-val="different">different</button></div></td>
+        </tr>
+        <tr>
+          <td>裡面 Inside</td><td>白色仁 <span class="en">white nut</span></td><td>黑色仁 <span class="en">black nut</span></td>
+          <td><div class="btns" data-row="inside"><button class="pick" data-val="same">same</button><button class="pick" data-val="different">different</button></div></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="frame">
+      <div class="muted" style="font-size:12px;font-weight:800;letter-spacing:.08em">SENTENCE FRAME</div>
+      <div>
+        <span class="en">The color is <select id="vColor"><option value="">____</option><option value="different">different</option><option value="same">same</option></select>.</span>
+        <span class="en">The inside is <select id="vInside"><option value="">____</option><option value="same">same</option><option value="different">different</option></select>.</span>
+      </div>
+      <div style="font-size:12.5px;color:var(--muted)">They are both peanuts, but they look different.</div>
+    </div>
+
+    <div class="row" style="margin-top:12px">
+      <div class="status" id="varStatus" aria-live="polite"></div>
+    </div>
+
+  </section>
+
+  <!-- ================= SCENE ================= -->
+  <section id="scene" class="sheet">
+    <span class="kicker">STEP 5 · WHERE DO PEANUTS GROW?</span>
+    <div class="spread">
+      <div>
+        <h2>🌱 花生地下探險圖</h2>
+        <p class="lead">花開在哪裡？花生莢長在哪裡？先點字卡，再點圖上的虛線圈，把 <span class="en">flower</span> 和 <span class="en">pods</span> 放到正確位置。</p>
+      </div>
+      <div class="row no-print">
+        <button class="btn ghost small" id="btnSceneReset">🔄 重來</button>
+        <button class="btn primary small" id="btnSceneCheck">✔ 檢查</button>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top:8px">
+      <div>
+        <div class="scene" id="sceneWrap">
+          <div id="sceneArt"></div>
+          <div class="target" data-zone="above" style="left:39%;top:27%" role="button" tabindex="0" aria-label="地上的位置"><b>?</b></div>
+          <div class="target" data-zone="under" style="left:51%;top:73%" role="button" tabindex="0" aria-label="地下的位置"><b>?</b></div>
+        </div>
+        <div class="scene-legend">
+          <span><b>above</b> 在上面</span><span><b>under</b> 在下面</span><span><b>soil</b> 土</span>
+        </div>
+        <div class="chips no-print" id="sceneChips" style="margin-top:12px"></div>
+        <div class="status" id="sceneStatus" aria-live="polite" style="margin-top:8px"></div>
+      </div>
+
+      <div>
+        <div class="frame" style="margin-top:0">
+          <div class="muted" style="font-size:12px;font-weight:800;letter-spacing:.08em">SENTENCE FRAME</div>
+          <div>
+            <span class="en">My flowers are <select id="sAbove"><option value="">____</option><option value="above">above</option><option value="under">under</option></select> the soil.</span><br>
+            <span class="en">My pods grow <select id="sUnder"><option value="">____</option><option value="under">under</option><option value="above">above</option></select> the soil.</span>
+          </div>
+          <div class="row" style="margin-top:4px">
+            <button class="mini blue" data-audio="My flowers are above the soil.|我的花在土上面。" type="button">🔊 聽句子</button>
+            <button class="mini blue" data-audio="My pods grow under the soil.|我的莢在土裡面長大。" type="button">🔊 聽句子</button>
+          </div>
+          <div style="margin-top:9px;padding-top:8px;border-top:2px dashed #E2C8A2">
+            <div><span class="en">What do you see?</span> — <span class="en">I see <span class="blank">______</span>.</span></div>
+            <div style="font-size:12.5px;color:var(--muted)">範例：I see a flower.／I see a pod under the soil.</div>
+            <div class="row" style="margin-top:2px">
+              <button class="mini blue" data-audio="What do you see?|你看到什麼？" type="button">🔊 What do you see?</button>
+              <button class="mini blue" data-audio="I see a flower above the soil.|我看到土上面有一朵花。" type="button">🔊 I see a flower.</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="note" style="margin-top:14px;background:#F4F9F0;border-color:#CFE3C5">
+          <b>🌼 花生的祕密：</b>花生在地上開花。花謝了以後，子房柄（果針 <span class="en">peg</span>）會往下鑽進土裡，子房在土裡慢慢長成莢。所以我們說：「<b>花開在地上，莢長在土裡。</b>」
+        </div>
+
+
+        <div class="row no-print" style="margin-top:12px">
+          <button class="btn blue" data-goto="train">搭小火車 ▶</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TRAIN ================= -->
+  <section id="train" class="sheet">
+    <span class="kicker">STEP 6 · SEQUENCE</span>
+    <div class="spread">
+      <div>
+        <h2>🚂 花生小火車：照順序上車</h2>
+        <p class="lead">先點一張圖卡，再點一節車廂；也可以直接拖曳。排好八站後按「檢查」，看看小火車能不能出發。</p>
+      </div>
+      <div class="row no-print">
+        <button class="btn ghost small" id="btnColorHint" aria-pressed="false">🎨 顏色提示</button>
+        <button class="btn blue small" id="btnTrainHint">💡 提示</button>
+        <button class="btn primary small" id="btnTrainCheck">✔ 檢查</button>
+        <button class="btn ghost small" id="btnTrainReset">🔄 重玩</button>
+      </div>
+    </div>
+
+    <div class="train-wrap">
+      <div class="train" id="trainLine"></div>
+    </div>
+
+    <h3 style="margin:16px 0 2px">🃏 旅程卡：點一張，再點車廂</h3>
+    <p class="lead" style="font-size:13px;margin-bottom:0">也可以直接把卡片拖進車廂；點車廂裡的卡片可以拿下來。</p>
+    <div class="pool no-print" id="pool"></div>
+
+    <div class="progress no-print" aria-hidden="true"><i id="trainBar"></i></div>
+    <div class="status" id="trainStatus" aria-live="polite" style="margin-top:8px">先放上第 1 站吧！</div>
+
+    <div class="frame no-print" style="margin-top:12px">
+      <div class="muted" style="font-size:12px;font-weight:800;letter-spacing:.08em">SEQUENCE LANGUAGE</div>
+      <div class="en" style="font-size:16px">
+        First, <span class="blank" id="seqFirstLabel">______</span>.
+        Next, <span class="blank" id="seqNextLabel">______</span>.
+      </div>
+      <div style="font-size:12.5px;color:var(--muted)">放上第 1、2 站後，跟著老師說一次；學生只說站名也可以。</div>
+      <div class="row" style="margin-top:4px">
+        <button class="mini blue" id="btnTrainSeqSay" type="button">🔊 聽句子</button>
+      </div>
+    </div>
+
+    <div class="row no-print" style="margin-top:10px">
+      <div class="legend">
+        <span><i style="background:#C97B3C"></i>種下花生 Planting</span>
+        <span><i style="background:#6FA35B"></i>花生成長 Growing</span>
+        <span><i style="background:#E5A93C"></i>開花結莢 Flowering &amp; Podding</span>
+        <span><i style="background:#7A8FA6"></i>收成與處理 Harvest &amp; Handling</span>
+      </div>
+    </div>
+
+    <div class="note no-print" style="margin-top:12px">
+      <b>💡 想一想：</b>哪幾站是「花生自己長大」？哪幾站是「人來幫忙」？<br>
+      <span style="font-size:12px">（提示：Plant、Sprout、Seedling、Flowering、Pod 是植物生長；Harvest、Dry、Transport 是農事處理。）</span>
+    </div>
+
+    <div class="print-only" style="margin-top:10px">
+      <h3>紙本小火車：剪下圖卡，貼進車廂</h3>
+      <div class="print-cut" id="printCut"></div>
+    </div>
+
+  </section>
+
+  <!-- ================= VOICE ================= -->
+  <section id="voice" class="sheet">
+    <span class="kicker">FINAL · CREATE</span>
+    <div class="spread">
+      <div>
+        <h2>💬 花生宣言：如果花生會說話</h2>
+        <p class="lead">畫一個花生角色，再用下面的句型，幫它說出「花在上、莢在下」的祕密。可以手寫，也可以直接在畫布上畫。</p>
+      </div>
+      <div class="row no-print">
+        <button class="btn ghost small" id="btnClearDoodle">🧽 清空畫布</button>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top:8px">
+      <div>
+        <div class="doodle-wrap"><canvas id="doodle" aria-label="花生角色畫布"></canvas></div>
+        <div class="palette no-print" id="palette">
+          <span class="muted" style="font-size:12px;font-weight:800">顏色</span>
+          <button class="swatch on" data-color="#5B3D22" style="background:#5B3D22" aria-label="深棕"></button>
+          <button class="swatch" data-color="#D9A05B" style="background:#D9A05B" aria-label="花生色"></button>
+          <button class="swatch" data-color="#C2543F" style="background:#C2543F" aria-label="紅色"></button>
+          <button class="swatch" data-color="#6FA35B" style="background:#6FA35B" aria-label="綠色"></button>
+          <button class="swatch" data-color="#E5A93C" style="background:#E5A93C" aria-label="黃色"></button>
+          <button class="swatch" data-color="#5B8FB9" style="background:#5B8FB9" aria-label="藍色"></button>
+          <button class="swatch" data-color="#FDFBF6" style="background:#FDFBF6" aria-label="橡皮擦"></button>
+          <label style="font-size:12px;font-weight:800;color:#6B4A2B;margin-left:4px">粗細
+            <input id="penSize" type="range" min="2" max="14" value="5" style="vertical-align:middle;width:80px">
+          </label>
+        </div>
+      </div>
+
+      <div>
+        <div class="frame" style="margin-top:0">
+          <div class="muted" style="font-size:12px;font-weight:800;letter-spacing:.08em">MY PEANUT SPEECH</div>
+          <div class="en" style="font-size:14px;line-height:2.1">
+            Hello! I am a peanut.<br>
+            My flowers are <span class="blank">above</span> the soil.<br>
+            My pods grow <span class="blank">under</span> the soil.<br>
+            I am <span class="blank">small</span> and <span class="blank">light-brown</span>.<br>
+            Peanut, peanut, change!
+          </div>
+        </div>
+
+        <div class="wordbank no-print" id="wordbank">
+          <button class="wb" data-word="above">above</button>
+          <button class="wb" data-word="under">under</button>
+          <button class="wb" data-word="soil">soil</button>
+          <button class="wb" data-word="flower">flower</button>
+          <button class="wb" data-word="pod">pod</button>
+          <button class="wb" data-word="shell">shell</button>
+          <button class="wb" data-word="skin">skin</button>
+          <button class="wb" data-word="nut">nut</button>
+          <button class="wb" data-word="big">big</button>
+          <button class="wb" data-word="small">small</button>
+          <button class="wb" data-word="dark">dark</button>
+          <button class="wb" data-word="light-brown">light-brown</button>
+        </div>
+
+        <label for="speech" style="display:block;margin-top:12px;font-size:13px;font-weight:800">寫下你的花生宣言（也可以只寫一句）</label>
+        <textarea id="speech" placeholder="Hello! I am a peanut. My flowers are above the soil. My pods grow under the soil..."></textarea>
+      </div>
+    </div>
+  </section>
+</main>
+
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+   花生魔法學習單 · 資料與插圖
+   所有圖形為內嵌 SVG，可離線使用、可列印
+   ============================================================ */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+
+const ART = {
+  peanut: `<svg viewBox="0 0 220 150" role="img" aria-label="帶殼花生">
+    <ellipse cx="110" cy="133" rx="66" ry="8" fill="#000" opacity=".07"/>
+    <path d="M26 74c0-24 18-38 40-39 18-1 30 9 44 9s26-10 44-9c22 1 40 15 40 39s-18 38-40 39c-18 1-30-9-44-9s-26 10-44 9c-22-1-40-15-40-39z"
+      fill="#D9A05B" stroke="#7A4E24" stroke-width="4.5" stroke-linejoin="round"/>
+    <ellipse cx="84" cy="60" rx="27" ry="15" fill="#F3D6AC" opacity=".5"/>
+    <ellipse cx="146" cy="63" rx="23" ry="13" fill="#F3D6AC" opacity=".38"/>
+    <path d="M56 97c9 8 21 11 31 8M164 97c-9 8-21 11-31 8" fill="none" stroke="#B87C40" stroke-width="10" opacity=".26" stroke-linecap="round"/>
+    <g fill="none" stroke="#A96C36" stroke-width="2.2" stroke-linecap="round" opacity=".5">
+      <path d="M44 63c9-6 19-7 28-2"/><path d="M40 77c10-5 21-5 30 0"/><path d="M47 92c9-4 19-4 27 0"/>
+      <path d="M176 63c-9-6-19-7-28-2"/><path d="M180 77c-10-5-21-5-30 0"/><path d="M173 92c-9-4-19-4-27 0"/>
+      <path d="M101 53c-5 7-6 14-4 21"/><path d="M119 53c5 7 6 14 4 21"/>
+    </g>
+    <g fill="#8A5A2B" opacity=".3">
+      <circle cx="64" cy="84" r="2.4"/><circle cx="90" cy="96" r="2"/><circle cx="130" cy="94" r="2.2"/><circle cx="158" cy="82" r="2"/>
+    </g>
+  </svg>`,
+  shell: `<svg viewBox="0 0 200 140" role="img" aria-label="花生殼">
+    <ellipse cx="100" cy="118" rx="55" ry="6" fill="#000" opacity=".07"/>
+    <path d="M36 80c0-27 29-46 64-46s64 19 64 46c0 14-29 23-64 23S36 94 36 80z" fill="#D9A05B" stroke="#7A4E24" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M50 78c0-18 23-33 50-33s50 15 50 33" fill="#C98B4A" stroke="#B97B3C" stroke-width="2.5" opacity=".75"/>
+    <path d="M64 84c12-7 25-9 36-9M100 75c11 0 24 2 36 9" stroke="#8A5A2B" stroke-width="2.5" fill="none" opacity=".45"/>
+    <circle cx="73" cy="62" r="2.6" fill="#8A5A2B" opacity=".4"/>
+    <circle cx="100" cy="55" r="2.2" fill="#8A5A2B" opacity=".35"/>
+    <circle cx="128" cy="63" r="2.5" fill="#8A5A2B" opacity=".4"/>
+  </svg>`,
+  skin: `<svg viewBox="0 0 200 140" role="img" aria-label="花生膜">
+    <ellipse cx="100" cy="121" rx="38" ry="6" fill="#000" opacity=".07"/>
+    <path d="M100 18c22 0 37 20 37 52s-15 52-37 52-37-20-37-52 15-52 37-52z" fill="#C2543F" stroke="#8E3427" stroke-width="4"/>
+    <path d="M82 36c-7 15-9 34-4 55" stroke="#E08A76" stroke-width="5" opacity=".6" fill="none" stroke-linecap="round"/>
+    <path d="M100 30c6 12 8 26 6 40" stroke="#8E3427" stroke-width="2.5" opacity=".45" fill="none" stroke-linecap="round"/>
+    <ellipse cx="110" cy="72" rx="14" ry="30" fill="#A63D2E" opacity=".28"/>
+  </svg>`,
+  nut: `<svg viewBox="0 0 200 140" role="img" aria-label="花生仁">
+    <ellipse cx="100" cy="121" rx="38" ry="6" fill="#000" opacity=".07"/>
+    <path d="M100 18c22 0 37 20 37 52s-15 52-37 52-37-20-37-52 15-52 37-52z" fill="#F3D9A4" stroke="#C9A06A" stroke-width="4"/>
+    <path d="M100 26v92" stroke="#D8B26A" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M84 36c-5 14-6 30-2 47" stroke="#FFF6DF" stroke-width="5" opacity=".8" fill="none" stroke-linecap="round"/>
+    <path d="M112 58c4 10 4 22 1 33" stroke="#E3C183" stroke-width="2.4" opacity=".7" fill="none" stroke-linecap="round"/>
+  </svg>`,
+  flower: `<svg viewBox="0 0 200 140" role="img" aria-label="花生花">
+    <path d="M100 128V72" stroke="#4C7A3C" stroke-width="5" stroke-linecap="round"/>
+    <path d="M100 104c-18 0-28-9-30-20 15-2 27 5 30 20z" fill="#6FA35B" stroke="#4C7A3C" stroke-width="3"/>
+    <path d="M100 96c16-1 25-9 27-19-14-2-24 5-27 19z" fill="#7DB368" stroke="#4C7A3C" stroke-width="3"/>
+    <g stroke="#C9971F" stroke-width="3">
+      <circle cx="100" cy="38" r="13" fill="#F2C14E"/>
+      <circle cx="78" cy="50" r="12" fill="#F2C14E"/>
+      <circle cx="122" cy="50" r="12" fill="#F2C14E"/>
+      <circle cx="86" cy="68" r="11" fill="#F6D06A"/>
+      <circle cx="114" cy="68" r="11" fill="#F6D06A"/>
+    </g>
+    <circle cx="100" cy="56" r="10" fill="#D98A34" stroke="#A9661F" stroke-width="2.5"/>
+  </svg>`,
+  pod: `<svg viewBox="0 0 200 140" role="img" aria-label="花生莢">
+    <ellipse cx="100" cy="121" rx="55" ry="6" fill="#000" opacity=".07"/>
+    <path d="M38 74c0-23 25-38 62-38s62 15 62 38-25 36-62 36S38 97 38 74z" fill="#C98B4A" stroke="#7A4E24" stroke-width="4"/>
+    <path d="M48 74c0-16 21-28 52-28s52 12 52 28-21 26-52 26S48 90 48 74z" fill="#F3D9A4" stroke="#B97B3C" stroke-width="2.5"/>
+    <ellipse cx="80" cy="74" rx="17" ry="21" fill="#F3D9A4" stroke="#C9A06A" stroke-width="2.5"/>
+    <ellipse cx="120" cy="74" rx="17" ry="21" fill="#F3D9A4" stroke="#C9A06A" stroke-width="2.5"/>
+    <path d="M80 62v24M120 62v24" stroke="#D8B26A" stroke-width="2"/>
+    <path d="M60 44c8-5 16-7 24-7M116 37c9 0 18 2 26 7" stroke="#8A5A2B" stroke-width="2.5" fill="none" opacity=".5"/>
+  </svg>`,
+  soil: `<svg viewBox="0 0 200 140" role="img" aria-label="土壤">
+    <rect x="18" y="30" width="164" height="90" rx="14" fill="#8B5E3C" stroke="#6B4429" stroke-width="4"/>
+    <path d="M18 62h164" stroke="#A9744B" stroke-width="3" opacity=".8"/>
+    <path d="M18 94h164" stroke="#6B4429" stroke-width="2" opacity=".5"/>
+    <ellipse cx="70" cy="86" rx="10" ry="7" fill="#F3D9A4" stroke="#C9A06A" stroke-width="2.5" transform="rotate(-18 70 86)"/>
+    <circle cx="126" cy="54" r="3" fill="#6B4429" opacity=".5"/>
+    <circle cx="146" cy="78" r="2.4" fill="#6B4429" opacity=".45"/>
+    <circle cx="54" cy="50" r="2.2" fill="#6B4429" opacity=".4"/>
+    <path d="M150 30c-12-10-26-12-36-6" stroke="#6FA35B" stroke-width="4" fill="none" stroke-linecap="round"/>
+  </svg>`,
+  seed: `<svg viewBox="0 0 200 140" role="img" aria-label="花生種子">
+    <ellipse cx="100" cy="121" rx="36" ry="6" fill="#000" opacity=".07"/>
+    <path d="M100 30c18 0 30 17 30 44s-12 42-30 42-30-15-30-42 12-44 30-44z" fill="#F3D9A4" stroke="#C9A06A" stroke-width="4"/>
+    <path d="M100 38v68" stroke="#D8B26A" stroke-width="2.4"/>
+    <path d="M86 50c-4 12-4 26-1 38" stroke="#FFF6DF" stroke-width="4" opacity=".8" fill="none" stroke-linecap="round"/>
+    <path d="M100 30c-2-10 4-18 14-20" stroke="#6FA35B" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M112 12c6-2 11 0 13 5-5 3-10 2-13-5z" fill="#6FA35B" stroke="#4C7A3C" stroke-width="2"/>
+  </svg>`
+};
+
+const STAGE_ART = {
+  sowing: `<svg viewBox="0 0 120 90" aria-hidden="true">
+    <rect x="0" y="61" width="120" height="29" fill="#8B5E3C"/>
+    <path d="M0 61h120" stroke="#6B4429" stroke-width="3"/>
+    <rect x="12" y="12" width="30" height="28" rx="4" fill="#E8C98A" stroke="#7A4E24" stroke-width="2.5"/>
+    <path d="M18 19h18M18 25h18" stroke="#B98A52" stroke-width="2"/>
+    <path d="M30 40v8" stroke="#7A4E24" stroke-width="2.2" stroke-dasharray="2 3"/>
+    <path d="M25.5 46l4.5 5 4.5-5" fill="none" stroke="#7A4E24" stroke-width="2.4"/>
+    <ellipse cx="52" cy="70" rx="4.2" ry="2.8" fill="#F3D9A4" stroke="#B98A52" stroke-width="1.6"/>
+    <ellipse cx="72" cy="76" rx="4.2" ry="2.8" fill="#F3D9A4" stroke="#B98A52" stroke-width="1.6"/>
+    <ellipse cx="92" cy="68" rx="4.2" ry="2.8" fill="#F3D9A4" stroke="#B98A52" stroke-width="1.6"/>
+  </svg>`,
+  sprout: `<svg viewBox="0 0 120 90" aria-hidden="true">
+    <rect x="0" y="61" width="120" height="29" fill="#8B5E3C"/>
+    <path d="M0 61h120" stroke="#6B4429" stroke-width="3"/>
+    <ellipse cx="60" cy="70" rx="7" ry="4.5" fill="#F3D9A4" stroke="#B98A52" stroke-width="2"/>
+    <path d="M60 68V42" stroke="#4C7A3C" stroke-width="4" stroke-linecap="round"/>
+    <path d="M60 50c-13-1-20-8-20-16 11-1 18 5 20 16z" fill="#6FA35B" stroke="#4C7A3C" stroke-width="2.5"/>
+    <path d="M60 46c12 0 18-6 18-14-10-1-16 5-18 14z" fill="#7DB368" stroke="#4C7A3C" stroke-width="2.5"/>
+  </svg>`,
+  seedling: `<svg viewBox="0 0 120 90" aria-hidden="true">
+    <rect x="0" y="64" width="120" height="26" fill="#8B5E3C"/>
+    <path d="M0 64h120" stroke="#6B4429" stroke-width="3"/>
+    <path d="M60 64V22" stroke="#4C7A3C" stroke-width="4.5" stroke-linecap="round"/>
+    <path d="M60 52c-15-1-23-9-23-19 13-1 21 6 23 19z" fill="#6FA35B" stroke="#4C7A3C" stroke-width="2.8"/>
+    <path d="M60 46c14 0 22-8 22-18-12-1-20 6-22 18z" fill="#7DB368" stroke="#4C7A3C" stroke-width="2.8"/>
+    <path d="M60 36c-12-1-18-7-18-15 10-1 16 5 18 15z" fill="#6FA35B" stroke="#4C7A3C" stroke-width="2.4"/>
+    <path d="M60 30c11 0 16-5 16-12-9-1-14 4-16 12z" fill="#7DB368" stroke="#4C7A3C" stroke-width="2.4"/>
+  </svg>`,
+  flowerpeg: `<svg viewBox="0 0 120 90" aria-hidden="true">
+    <rect x="0" y="58" width="120" height="32" fill="#8B5E3C"/>
+    <path d="M0 58h120" stroke="#6B4429" stroke-width="3"/>
+    <path d="M58 58V22" stroke="#4C7A3C" stroke-width="4" stroke-linecap="round"/>
+    <path d="M58 48c-13-1-20-7-20-16 11-1 18 5 20 16z" fill="#6FA35B" stroke="#4C7A3C" stroke-width="2.5"/>
+    <path d="M58 44c12 0 18-6 18-14-10-1-16 5-18 14z" fill="#7DB368" stroke="#4C7A3C" stroke-width="2.5"/>
+    <g>
+      <circle cx="38" cy="24" r="8" fill="#F2C14E" stroke="#C9971F" stroke-width="2"/>
+      <circle cx="58" cy="16" r="8" fill="#F2C14E" stroke="#C9971F" stroke-width="2"/>
+      <circle cx="78" cy="24" r="8" fill="#F2C14E" stroke="#C9971F" stroke-width="2"/>
+      <circle cx="38" cy="24" r="3" fill="#D98A34"/><circle cx="58" cy="16" r="3" fill="#D98A34"/><circle cx="78" cy="24" r="3" fill="#D98A34"/>
+    </g>
+    <path d="M38 32c0 12 2 22 6 30" stroke="#8F5E9E" stroke-width="2.4" fill="none"/>
+    <path d="M78 32c0 12-2 22-6 30" stroke="#8F5E9E" stroke-width="2.4" fill="none"/>
+    <ellipse cx="45" cy="68" rx="4" ry="6" fill="#F3D9A4" stroke="#B98A52" stroke-width="1.8"/>
+    <ellipse cx="71" cy="68" rx="4" ry="6" fill="#F3D9A4" stroke="#B98A52" stroke-width="1.8"/>
+  </svg>`,
+  pods: `<svg viewBox="0 0 120 90" aria-hidden="true">
+    <rect x="0" y="26" width="120" height="10" fill="#8B5E3C"/>
+    <path d="M0 26h120" stroke="#6B4429" stroke-width="2.5"/>
+    <rect x="0" y="36" width="120" height="54" fill="#A9744B"/>
+    <path d="M0 36h120" stroke="#6B4429" stroke-width="3"/>
+    <path d="M60 36V10" stroke="#4C7A3C" stroke-width="4" stroke-linecap="round"/>
+    <path d="M60 24c-12-1-18-6-18-13 9-1 15 4 18 13z" fill="#6FA35B" stroke="#4C7A3C" stroke-width="2.3"/>
+    <path d="M60 20c11 0 16-5 16-12-9-1-14 4-16 12z" fill="#7DB368" stroke="#4C7A3C" stroke-width="2.3"/>
+    <path d="M60 36c-8 8-14 14-18 22M60 36c8 8 12 16 16 24" stroke="#8F5E9E" stroke-width="2.2" fill="none"/>
+    <ellipse cx="38" cy="66" rx="10" ry="7" fill="#D9A05B" stroke="#7A4E24" stroke-width="2" transform="rotate(-20 38 66)"/>
+    <ellipse cx="82" cy="70" rx="10" ry="7" fill="#D9A05B" stroke="#7A4E24" stroke-width="2" transform="rotate(18 82 70)"/>
+    <path d="M33 66h10M77 70h10" stroke="#B97B3C" stroke-width="1.6"/>
+  </svg>`,
+  harvest: `<svg viewBox="0 0 120 90" aria-hidden="true">
+    <rect x="0" y="66" width="120" height="24" fill="#8B5E3C"/>
+    <path d="M0 66h120" stroke="#6B4429" stroke-width="2.5"/>
+    <path d="M42 66V22" stroke="#4C7A3C" stroke-width="4" stroke-linecap="round"/>
+    <path d="M42 44c-13-1-20-7-20-16 11-1 18 5 20 16z" fill="#6FA35B" stroke="#4C7A3C" stroke-width="2.5"/>
+    <path d="M42 36c12 0 18-6 18-14-10-1-16 5-18 14z" fill="#7DB368" stroke="#4C7A3C" stroke-width="2.5"/>
+    <path d="M42 66c-6 5-12 8-18 9M42 66c6 5 12 8 18 9" stroke="#8F5E9E" stroke-width="2" fill="none"/>
+    <ellipse cx="22" cy="77" rx="9" ry="6" fill="#D9A05B" stroke="#7A4E24" stroke-width="1.8" transform="rotate(-18 22 77)"/>
+    <ellipse cx="62" cy="78" rx="9" ry="6" fill="#D9A05B" stroke="#7A4E24" stroke-width="1.8" transform="rotate(18 62 78)"/>
+    <path d="M86 56h24v20H86z" fill="#C98B4A" stroke="#7A4E24" stroke-width="2.2"/>
+    <path d="M86 56c4-12 20-12 24 0" fill="none" stroke="#7A4E24" stroke-width="2.2"/>
+    <path d="M90 66h16M90 71h16" stroke="#B97B3C" stroke-width="1.8"/>
+  </svg>`,
+  dry: `<svg viewBox="0 0 120 90" aria-hidden="true">
+    <rect x="0" y="70" width="120" height="20" fill="#C9A06A"/>
+    <path d="M0 70h120" stroke="#8A5A2B" stroke-width="2.5"/>
+    <circle cx="94" cy="20" r="12" fill="#F2C14E" stroke="#C9971F" stroke-width="2.5"/>
+    <g stroke="#E5A93C" stroke-width="2.4" stroke-linecap="round">
+      <path d="M94 2v6M94 32v6M76 20h6M106 20h6M81 7l4 4M103 29l4 4M107 7l-4 4M85 29l-4 4"/>
+    </g>
+    <rect x="8" y="58" width="78" height="12" rx="3" fill="#E8C98A" stroke="#8A5A2B" stroke-width="2"/>
+    <ellipse cx="22" cy="64" rx="7" ry="4.5" fill="#D9A05B" stroke="#7A4E24" stroke-width="1.6" transform="rotate(-14 22 64)"/>
+    <ellipse cx="43" cy="65" rx="7" ry="4.5" fill="#D9A05B" stroke="#7A4E24" stroke-width="1.6" transform="rotate(10 43 65)"/>
+    <ellipse cx="64" cy="63" rx="7" ry="4.5" fill="#D9A05B" stroke="#7A4E24" stroke-width="1.6" transform="rotate(-8 64 63)"/>
+  </svg>`,
+  transport: `<svg viewBox="0 0 120 90" aria-hidden="true">
+    <rect x="0" y="72" width="120" height="18" fill="#8A8F96"/>
+    <path d="M0 72h120" stroke="#5F666E" stroke-width="2.5"/>
+    <path d="M12 36h44v30H12z" fill="#F0D9B5" stroke="#7A4E24" stroke-width="2.5"/>
+    <path d="M56 44h22l12 12v10H56z" fill="#D98A34" stroke="#7A4E24" stroke-width="2.5"/>
+    <path d="M62 48h13l8 8H62z" fill="#DDF0FA" stroke="#7A4E24" stroke-width="1.8"/>
+    <rect x="14" y="60" width="40" height="6" rx="2" fill="#C98B4A" stroke="#7A4E24" stroke-width="1.6"/>
+    <ellipse cx="26" cy="52" rx="7" ry="4.5" fill="#D9A05B" stroke="#7A4E24" stroke-width="1.6" transform="rotate(-12 26 52)"/>
+    <ellipse cx="44" cy="53" rx="7" ry="4.5" fill="#D9A05B" stroke="#7A4E24" stroke-width="1.6" transform="rotate(12 44 53)"/>
+    <circle cx="28" cy="72" r="7" fill="#4A3520" stroke="#2E2114" stroke-width="2"/>
+    <circle cx="28" cy="72" r="2.4" fill="#C9A06A"/>
+    <circle cx="78" cy="72" r="7" fill="#4A3520" stroke="#2E2114" stroke-width="2"/>
+    <circle cx="78" cy="72" r="2.4" fill="#C9A06A"/>
+    <path d="M4 30h10M0 36h12" stroke="#B98A52" stroke-width="2.4" stroke-linecap="round"/>
+  </svg>`
+};
+
+const STRUCT_ART = `<svg viewBox="0 0 600 300" role="img" aria-label="花生構造：殼、膜、仁">
+  <rect x="0" y="0" width="600" height="300" fill="#FFFBF2"/>
+  <circle cx="110" cy="195" r="82" fill="#FFF1DC"/>
+  <circle cx="300" cy="195" r="82" fill="#FDEDE9"/>
+  <circle cx="490" cy="195" r="82" fill="#FFF7E2"/>
+  <g>
+    <path d="M55 205c0-22 16-35 36-35 11 0 18 6 30 6s20-6 32-6c20 0 34 13 34 35 0 24-19 38-50 38H105c-31 0-50-14-50-38z" fill="#D9A05B" stroke="#7A4E24" stroke-width="4"/>
+    <path d="M108 176c-3 10-3 20 0 30M124 176c3 10 3 20 0 30" stroke="#B97B3C" stroke-width="3" fill="none"/>
+    <path d="M70 198c11-5 22-5 32 0M132 198c11-5 22-5 32 0" stroke="#B97B3C" stroke-width="3" fill="none" opacity=".7"/>
+    <ellipse cx="110" cy="212" rx="30" ry="9" fill="#C98B4A" opacity=".55"/>
+  </g>
+  <g>
+    <path d="M300 130c24 0 40 22 40 57s-16 55-40 55-40-20-40-55 16-57 40-57z" fill="#C2543F" stroke="#8E3427" stroke-width="4"/>
+    <path d="M281 152c-7 16-9 36-4 58" stroke="#E08A76" stroke-width="5" opacity=".6" fill="none" stroke-linecap="round"/>
+    <path d="M300 140c7 14 9 30 7 46" stroke="#8E3427" stroke-width="2.4" opacity=".45" fill="none" stroke-linecap="round"/>
+  </g>
+  <g>
+    <path d="M490 130c24 0 40 22 40 57s-16 55-40 55-40-20-40-55 16-57 40-57z" fill="#F3D9A4" stroke="#C9A06A" stroke-width="4"/>
+    <path d="M490 140v92" stroke="#D8B26A" stroke-width="2.6"/>
+    <path d="M472 154c-5 14-6 30-2 47" stroke="#FFF6DF" stroke-width="5" opacity=".8" fill="none" stroke-linecap="round"/>
+  </g>
+  <g fill="#A98A68" font-size="15" font-weight="700" font-family="sans-serif" text-anchor="middle">
+    <text x="110" y="278">1</text><text x="300" y="278">2</text><text x="490" y="278">3</text>
+  </g>
+</svg>`;
+
+const VARIETY_ART_A = `<svg viewBox="0 0 200 120" role="img" aria-label="油豆的花生仁">
+  <ellipse cx="100" cy="104" rx="48" ry="6" fill="#000" opacity=".07"/>
+  <path d="M52 64c-1-19 16-33 46-33 29 0 47 12 47 31 0 20-18 32-47 32-30 0-46-11-46-30z" fill="#E6B29C" stroke="#AE7459" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M63 58c3-11 12-18 25-20" fill="none" stroke="#F9DED1" stroke-width="6" opacity=".85" stroke-linecap="round"/>
+  <path d="M100 39c-5 11-7 21-6 31" fill="none" stroke="#C1856C" stroke-width="2.4" opacity=".55"/>
+  <path d="M140 56c3 8 2 16-2 23" fill="none" stroke="#C1856C" stroke-width="2.2" opacity=".45"/>
+</svg>`;
+
+const VARIETY_ART_B = `<svg viewBox="0 0 200 120" role="img" aria-label="黑金剛的花生仁">
+  <ellipse cx="100" cy="101" rx="38" ry="5" fill="#000" opacity=".07"/>
+  <path d="M64 64c-1-16 13-27 36-27 22 0 37 10 37 26 0 17-15 27-37 27-23 0-37-10-36-26z" fill="#4A2B3C" stroke="#2B1722" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M74 58c2-9 9-15 19-16" fill="none" stroke="#7E5069" stroke-width="5" opacity=".8" stroke-linecap="round"/>
+  <path d="M100 39c-4 9-5 18-4 26" fill="none" stroke="#6B4157" stroke-width="2.2" opacity=".7"/>
+</svg>`;
+
+const SCENE_ART = `<svg viewBox="0 0 640 400" role="img" aria-label="花生地下探險圖">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#EAF6FF"/><stop offset="1" stop-color="#F7FCF3"/>
+    </linearGradient>
+    <linearGradient id="soil" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9C6B45"/><stop offset="1" stop-color="#7A4E2E"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="240" fill="url(#sky)"/>
+  <circle cx="548" cy="58" r="30" fill="#F8D77E" opacity=".9"/>
+  <g fill="#fff" opacity=".9">
+    <ellipse cx="112" cy="62" rx="42" ry="20"/><ellipse cx="150" cy="54" rx="28" ry="16"/><ellipse cx="76" cy="54" rx="24" ry="14"/>
+  </g>
+  <rect y="240" width="640" height="160" fill="url(#soil)"/>
+  <path d="M0 240h640" stroke="#6B4429" stroke-width="5"/>
+  <g stroke="#6FA35B" stroke-width="4" stroke-linecap="round">
+    <path d="M40 240c4-12 10-16 18-18M60 240c2-9 7-14 13-17M560 240c4-12 10-16 18-18M590 240c2-9 7-14 13-17"/>
+  </g>
+  <g>
+    <path d="M320 240V104" stroke="#4C7A3C" stroke-width="7" stroke-linecap="round"/>
+    <path d="M320 186c-34-2-52-18-52-42 30-2 48 14 52 42z" fill="#6FA35B" stroke="#4C7A3C" stroke-width="4"/>
+    <path d="M320 166c32 0 50-16 50-38-28-2-46 13-50 38z" fill="#7DB368" stroke="#4C7A3C" stroke-width="4"/>
+    <path d="M320 140c-28-2-42-15-42-34 24-2 38 11 42 34z" fill="#6FA35B" stroke="#4C7A3C" stroke-width="3.5"/>
+  </g>
+  <g id="svgFlower">
+    <g>
+      <circle cx="250" cy="112" r="14" fill="#F2C14E" stroke="#C9971F" stroke-width="3"/>
+      <circle cx="226" cy="124" r="13" fill="#F2C14E" stroke="#C9971F" stroke-width="3"/>
+      <circle cx="274" cy="124" r="13" fill="#F2C14E" stroke="#C9971F" stroke-width="3"/>
+      <circle cx="250" cy="140" r="12" fill="#F6D06A" stroke="#C9971F" stroke-width="3"/>
+      <circle cx="250" cy="128" r="8" fill="#D98A34" stroke="#A9661F" stroke-width="2.5"/>
+    </g>
+    <g>
+      <circle cx="392" cy="124" r="12" fill="#F2C14E" stroke="#C9971F" stroke-width="3"/>
+      <circle cx="372" cy="134" r="11" fill="#F2C14E" stroke="#C9971F" stroke-width="3"/>
+      <circle cx="412" cy="134" r="11" fill="#F2C14E" stroke="#C9971F" stroke-width="3"/>
+      <circle cx="392" cy="148" r="10" fill="#F6D06A" stroke="#C9971F" stroke-width="3"/>
+      <circle cx="392" cy="137" r="7" fill="#D98A34" stroke="#A9661F" stroke-width="2.5"/>
+    </g>
+    <g>
+      <circle cx="320" cy="84" r="13" fill="#F2C14E" stroke="#C9971F" stroke-width="3"/>
+      <circle cx="298" cy="94" r="12" fill="#F2C14E" stroke="#C9971F" stroke-width="3"/>
+      <circle cx="342" cy="94" r="12" fill="#F2C14E" stroke="#C9971F" stroke-width="3"/>
+      <circle cx="320" cy="108" r="11" fill="#F6D06A" stroke="#C9971F" stroke-width="3"/>
+      <circle cx="320" cy="97" r="7" fill="#D98A34" stroke="#A9661F" stroke-width="2.5"/>
+    </g>
+  </g>
+  <g stroke="#A97BB5" stroke-width="3.5" fill="none" stroke-linecap="round">
+    <path d="M250 146c0 34-8 60-14 84"/>
+    <path d="M392 154c0 32 8 56 14 80"/>
+    <path d="M320 116c0 40 2 70 4 96"/>
+  </g>
+  <g id="svgPods">
+    <ellipse cx="252" cy="292" rx="34" ry="23" fill="#D9A05B" stroke="#7A4E24" stroke-width="4" transform="rotate(-16 252 292)"/>
+    <path d="M230 292h44" stroke="#B97B3C" stroke-width="3"/>
+    <ellipse cx="388" cy="302" rx="34" ry="23" fill="#D9A05B" stroke="#7A4E24" stroke-width="4" transform="rotate(14 388 302)"/>
+    <path d="M366 302h44" stroke="#B97B3C" stroke-width="3"/>
+    <ellipse cx="322" cy="330" rx="34" ry="23" fill="#D9A05B" stroke="#7A4E24" stroke-width="4" transform="rotate(-4 322 330)"/>
+    <path d="M300 330h44" stroke="#B97B3C" stroke-width="3"/>
+  </g>
+  <g fill="#5B3D22" font-family="sans-serif" font-weight="700" font-size="15">
+    <text x="34" y="222">above the soil</text>
+    <text x="34" y="270" fill="#F8E7CF">under the soil</text>
+  </g>
+</svg>`;
+
+const ENGINE_ART = `<svg viewBox="0 0 120 100" aria-hidden="true">
+  <rect x="10" y="52" width="58" height="26" rx="8" fill="#C2543F" stroke="#7A3A2B" stroke-width="3"/>
+  <rect x="42" y="34" width="34" height="24" rx="6" fill="#E5A93C" stroke="#8A5A2B" stroke-width="3"/>
+  <rect x="48" y="39" width="14" height="11" rx="2" fill="#DDF0FA" stroke="#8A5A2B" stroke-width="2"/>
+  <rect x="18" y="30" width="14" height="22" rx="4" fill="#8A5A2B"/>
+  <path d="M24 24c-5-6 4-9 0-15" stroke="#B9A184" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <circle cx="28" cy="80" r="9" fill="#4A3520" stroke="#2E2114" stroke-width="2.5"/><circle cx="28" cy="80" r="3" fill="#C9A06A"/>
+  <circle cx="52" cy="80" r="9" fill="#4A3520" stroke="#2E2114" stroke-width="2.5"/><circle cx="52" cy="80" r="3" fill="#C9A06A"/>
+  <circle cx="76" cy="80" r="9" fill="#4A3520" stroke="#2E2114" stroke-width="2.5"/><circle cx="76" cy="80" r="3" fill="#C9A06A"/>
+  <path d="M10 72h70" stroke="#7A3A2B" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="96" cy="46" r="8" fill="#F2C14E" stroke="#C9971F" stroke-width="2.5"/>
+</svg>`;
+
+/* ============================================================
+   資料
+   ============================================================ */
+const CARDS = [
+  {id:'peanut', en:'peanut', zh:'花生', tint:'#FFF6E4', art:ART.peanut,
+   sent:'Peanuts grow in the soil.', sentZh:'花生長在土裡。'},
+  {id:'shell', en:'shell', zh:'殼', tint:'#FFF3E1', art:ART.shell,
+   sent:'The shell is rough and hard.', sentZh:'殼粗粗硬硬的。'},
+  {id:'skin', en:'skin', zh:'膜', tint:'#FDEDE9', art:ART.skin,
+   sent:'The skin is thin and red.', sentZh:'膜薄薄紅紅的。'},
+  {id:'nut', en:'nut', zh:'仁', tint:'#FFF8E6', art:ART.nut,
+   sent:'The nut is white and smooth.', sentZh:'花生仁白白的、滑滑的。'},
+  {id:'flower', en:'flower', zh:'花', tint:'#FFF9E0', art:ART.flower,
+   sent:'The flowers are above the soil.', sentZh:'花開在土上面。'},
+  {id:'pod', en:'pod', zh:'莢', tint:'#F6EEE2', art:ART.pod,
+   sent:'The pods grow under the soil.', sentZh:'莢長在土裡面。'},
+  {id:'soil', en:'soil', zh:'土', tint:'#F2E8DC', art:ART.soil,
+   sent:'Peanuts grow in the soil.', sentZh:'花生在土裡長大。'},
+  {id:'seed', en:'seed', zh:'種子', tint:'#FFF8E6', art:ART.seed,
+   sent:'One seed can grow into a peanut plant.', sentZh:'一顆種子可以長成一株花生。'}
+];
+
+const GROUPS = [
+  {name:'種下花生', en:'Planting', color:'#C97B3C'},
+  {name:'花生成長', en:'Growing', color:'#6FA35B'},
+  {name:'開花結莢', en:'Flowering & Podding', color:'#E5A93C'},
+  {name:'收成與處理', en:'Harvest & Handling', color:'#7A8FA6'}
+];
+
+const STAGES = [
+  {id:'sowing', en:'Plant', zh:'播種', group:0, say:'Plant. 播種。把種子種進土裡。'},
+  {id:'sprout', en:'Sprout', zh:'發芽', group:1, say:'Sprout. 發芽。種子長出小芽。'},
+  {id:'seedling', en:'Seedling', zh:'幼苗', group:1, say:'Seedling. 幼苗。小芽長出葉子。'},
+  {id:'flowerpeg', en:'Flowering', zh:'開花', group:2, say:'Flowering. 開花。花在地上開，果針往土裡鑽。'},
+  {id:'pods', en:'Pod', zh:'結莢', group:2, say:'Pod. 結莢。花生莢在土裡長大。'},
+  {id:'harvest', en:'Harvest', zh:'收成', group:3, say:'Harvest. 收成。農夫把花生拔起來。'},
+  {id:'dry', en:'Dry', zh:'曬乾', group:3, say:'Dry. 曬乾。把花生曬乾。'},
+  {id:'transport', en:'Transport', zh:'運送', group:3, say:'Transport. 運送。把花生送到市場。'}
+];
+
+/* ============================================================
+   語音
+   ============================================================ */
+let ttsOn = true;
+let voices = [];
+function loadVoices(){ if('speechSynthesis' in window) voices = speechSynthesis.getVoices(); }
+if('speechSynthesis' in window){ loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
+function speak(en, zh){
+  if(!ttsOn || !('speechSynthesis' in window)) return;
+  try{
+    speechSynthesis.cancel();
+    const parts = [];
+    if(en) parts.push([en, 'en-US', .82]);
+    if(zh) parts.push([zh, 'zh-TW', .9]);
+    parts.forEach(([text, lang, rate]) => {
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = lang; u.rate = rate; u.pitch = 1;
+      const v = voices.find(v => v.lang && v.lang.toLowerCase().startsWith(lang.slice(0,2)));
+      if(v) u.voice = v;
+      speechSynthesis.speak(u);
+    });
+  }catch(e){}
+}
+function sayPair(str){
+  const i = str.indexOf('|');
+  if(i < 0) speak(str, null); else speak(str.slice(0, i), str.slice(i+1));
+}
+function speakQueue(items){
+  if(!ttsOn || !('speechSynthesis' in window)) return;
+  try{
+    speechSynthesis.cancel();
+    items.forEach(([text, lang, rate]) => {
+      if(!text) return;
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = lang; u.rate = rate || .85; u.pitch = 1;
+      const v = voices.find(v => v.lang && v.lang.toLowerCase().startsWith(lang.slice(0,2)));
+      if(v) u.voice = v;
+      speechSynthesis.speak(u);
+    });
+  }catch(e){}
+}
+function ding(){ tone(880,.12); setTimeout(()=>tone(1320,.22),110); }
+function buzz(){ tone(170,.22,'square',.08); }
+function fanfare(){ [523,659,784,1047].forEach((f,i)=>setTimeout(()=>tone(f,.28,'triangle',.16), i*130)); }
+let audioCtx = null;
+function tone(f, d, type, vol){
+  try{
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+    const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+    o.type = type || 'sine'; o.frequency.value = f; g.gain.value = vol || .13;
+    o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + (d || .15));
+  }catch(e){}
+}
+
+/* ============================================================
+   共用 UI
+   ============================================================ */
+let toastTimer = null;
+function toast(msg){
+  const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.classList.remove('show'), 1900);
+}
+function confetti(){
+  const colors = ['#E07A2F','#F2C14E','#6FA35B','#C2543F','#5B8FB9','#D9A05B'];
+  for(let i=0;i<55;i++){
+    const d = document.createElement('div');
+    d.className = 'confetti';
+    d.style.left = Math.random()*100 + 'vw';
+    d.style.background = colors[Math.floor(Math.random()*colors.length)];
+    d.style.animationDuration = (1.6 + Math.random()*1.6) + 's';
+    d.style.animationDelay = (Math.random()*.5) + 's';
+    d.style.transform = 'rotate(' + Math.random()*360 + 'deg)';
+    document.body.appendChild(d);
+    setTimeout(()=>d.remove(), 3600);
+  }
+}
+
+/* ============================================================
+   頁籤
+   ============================================================ */
+function goTab(name){
+  $$('.tab').forEach(t => {
+    const on = t.dataset.tab === name;
+    t.classList.toggle('active', on);
+    t.setAttribute('aria-selected', on ? 'true' : 'false');
+  });
+  $$('.sheet').forEach(s => s.classList.toggle('active', s.id === name));
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+$$('.tab').forEach(t => t.addEventListener('click', () => goTab(t.dataset.tab)));
+$$('[data-goto]').forEach(b => b.addEventListener('click', () => goTab(b.dataset.goto)));
+
+/* ============================================================
+   圖卡
+   ============================================================ */
+function renderCards(){
+  if($('#heroArt')) $('#heroArt').innerHTML = ART.peanut;
+  $('#fcGrid').innerHTML = CARDS.map(c => `
+    <div class="fc" tabindex="0" role="button" aria-label="${c.en} ${c.zh}，點一下翻面" data-id="${c.id}">
+      <div class="fc-inner">
+        <div class="face front" style="--tint:${c.tint}">
+          <div class="art">${c.art}</div>
+          <div class="word en">${c.en}</div>
+          <div class="zh">${c.zh}</div>
+          <div class="hint">點一下看背面</div>
+        </div>
+        <div class="face back">
+          <div class="zh">${c.zh}</div>
+          <div class="big en">${c.en}</div>
+          <div class="sent en">${c.sent}</div>
+          <div class="sent" style="font-size:12.5px;color:#6E5334">${c.sentZh}</div>
+          <div class="row">
+            <button class="mini blue" data-say="en" type="button">🔊 English</button>
+            <button class="mini" data-say="zh" type="button">🔊 中文</button>
+          </div>
+        </div>
+      </div>
+    </div>`).join('');
+
+  $$('#fcGrid .fc').forEach(card => {
+    const c = CARDS.find(x => x.id === card.dataset.id);
+    const flip = () => {
+      card.classList.toggle('flipped');
+      if(card.classList.contains('flipped')) speak(c.en, c.zh);
+    };
+    card.addEventListener('click', e => {
+      if(e.target.closest('button')) return;
+      flip();
+    });
+    card.addEventListener('keydown', e => {
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); flip(); }
+    });
+    card.querySelectorAll('[data-say]').forEach(b => b.addEventListener('click', e => {
+      e.stopPropagation();
+      if(b.dataset.say === 'en') speak(c.en, null);
+      else speak(null, c.zh + '。' + c.sentZh);
+    }));
+  });
+
+  $('#printCards').innerHTML = CARDS.map(c => `
+    <div class="pc">
+      ${c.art}
+      <div class="e en">${c.en}</div>
+      <div class="z">${c.zh}</div>
+      <div class="s en">${c.sent}</div>
+      <div class="s">${c.sentZh}</div>
+    </div>`).join('');
+}
+$('#btnSayAll').addEventListener('click', () => {
+  speak(CARDS.slice(0,6).map(c=>c.en).join(', '), CARDS.slice(0,6).map(c=>c.zh).join('、'));
+});
+
+/* ============================================================
+   句型練習
+   ============================================================ */
+function pickPatternChip(btn){
+  $$('#p1Chips .chip').forEach(x => x.classList.toggle('selected', x === btn));
+  const word = btn.dataset.word;
+  $('#p1Word').textContent = word;
+  $('#p1Answer').textContent = "It's " + word + ".";
+  $('#p1Say').textContent = "🔊 It's " + word + ".";
+  speak("It's " + word + ".", "它是" + btn.dataset.zh + "。");
+}
+$('#p1Chips').addEventListener('click', e => {
+  const b = e.target.closest('.chip'); if(!b) return;
+  pickPatternChip(b);
+});
+$('#p1Say').addEventListener('click', () => {
+  const b = $('#p1Chips .chip.selected') || $('#p1Chips .chip');
+  if(b) pickPatternChip(b);
+});
+
+function pickSeeChip(btn){
+  $$('#p2Chips .chip').forEach(x => x.classList.toggle('selected', x === btn));
+  const word = btn.dataset.word;
+  $('#p2Word').textContent = word;
+  $('#p2Answer').textContent = 'I see ' + word + '.';
+  $('#p2Say').textContent = '🔊 I see ' + word + '.';
+  speak('I see ' + word + '.', '我看到' + btn.dataset.zh + '。');
+}
+$('#p2Chips').addEventListener('click', e => {
+  const b = e.target.closest('.chip'); if(!b) return;
+  pickSeeChip(b);
+});
+$('#p2Say').addEventListener('click', () => {
+  const b = $('#p2Chips .chip.selected') || $('#p2Chips .chip');
+  if(b) pickSeeChip(b);
+});
+
+const seqOptions = '<option value="">______</option>' + STAGES.map(s =>
+  `<option value="${s.id}">${s.en}（${s.zh}）</option>`).join('');
+$('#seqFirst').innerHTML = seqOptions;
+$('#seqNext').innerHTML = seqOptions;
+function speakSequence(){
+  const a = STAGES.find(s => s.id === $('#seqFirst').value);
+  const b = STAGES.find(s => s.id === $('#seqNext').value);
+  if(!a || !b){ toast('先選兩個階段，再聽句子。'); return; }
+  $('#seqAnswer').textContent = 'First, ' + a.en + '. Next, ' + b.en + '.';
+  speakQueue([
+    ['First, ' + a.en + '.', 'en-US', .82],
+    ['首先，' + a.zh + '。', 'zh-TW', .9],
+    ['Next, ' + b.en + '.', 'en-US', .82],
+    ['接著，' + b.zh + '。', 'zh-TW', .9]
+  ]);
+}
+$('#seqSay').addEventListener('click', speakSequence);
+$('#seqFirst').addEventListener('change', speakSequence);
+$('#seqNext').addEventListener('change', speakSequence);
+$('#seqExample').addEventListener('click', () => {
+  $('#seqFirst').value = 'sowing';
+  $('#seqNext').value = 'sprout';
+  speakSequence();
+});
+$('#btnPatternSayAll').addEventListener('click', () => {
+  speakQueue([
+    ['What is it?', 'en-US', .82],
+    ["It's a peanut.", 'en-US', .82],
+    ['What do you see?', 'en-US', .82],
+    ['I see a flower.', 'en-US', .82],
+    ['First, Plant. Next, Sprout.', 'en-US', .82],
+    ['這是什麼？它是一顆花生。你看到什麼？我看到一朵花。首先，播種。接著，發芽。', 'zh-TW', .9]
+  ]);
+});
+
+/* ============================================================
+   構造標示
+   ============================================================ */
+const STRUCT_LABELS = [
+  {id:'shell', en:'shell', zh:'殼'},
+  {id:'skin', en:'skin', zh:'膜'},
+  {id:'nut', en:'nut', zh:'仁'},
+  {id:'peanut', en:'peanut', zh:'花生'},
+  {id:'flower', en:'flower', zh:'花'}
+];
+let structPicked = null;
+const structState = {shell:null, skin:null, nut:null};
+
+function renderStruct(){
+  $('#structArt').innerHTML = STRUCT_ART;
+  $('#structChips').innerHTML = STRUCT_LABELS.map(l => `
+    <button class="chip" data-pick="${l.id}" type="button">${l.en} <small>${l.zh}</small></button>`).join('');
+}
+function refreshStructChips(){
+  const used = new Set(Object.values(structState).filter(Boolean));
+  $$('#structChips .chip').forEach(ch => {
+    ch.classList.toggle('used', used.has(ch.dataset.pick));
+    ch.classList.toggle('selected', structPicked === ch.dataset.pick && !used.has(ch.dataset.pick));
+  });
+  $$('#structArtWrap .target').forEach(t => {
+    const id = structState[t.dataset.part];
+    t.classList.toggle('ok', id === t.dataset.part);
+    t.innerHTML = id ? `<b>${id}<br><span style="font-size:10px">${STRUCT_LABELS.find(x=>x.id===id).zh}</span></b>` : '<b>?</b>';
+  });
+}
+$('#structChips').addEventListener('click', e => {
+  const ch = e.target.closest('.chip'); if(!ch) return;
+  structPicked = ch.dataset.pick;
+  refreshStructChips();
+  const l = STRUCT_LABELS.find(x => x.id === structPicked);
+  speak(l.en, l.zh);
+});
+$('#structArtWrap').addEventListener('click', e => {
+  const t = e.target.closest('.target'); if(!t) return;
+  const part = t.dataset.part;
+  if(structState[part]){
+    structState[part] = null;
+    structPicked = null;
+    refreshStructChips();
+    $('#structStatus').textContent = '拿下來了，再試一次。';
+    $('#structStatus').className = 'status';
+    return;
+  }
+  if(!structPicked){ toast('先點下面的字卡，再點這裡。'); return; }
+  structState[part] = structPicked;
+  const ok = structPicked === part;
+  speak(STRUCT_LABELS.find(x=>x.id===structPicked).en, null);
+  refreshStructChips();
+  if(ok){
+    ding();
+    $('#structStatus').textContent = '很好！再找下一個。';
+    $('#structStatus').className = 'status ok';
+  }else{
+    buzz();
+    $('#structStatus').textContent = '再想想：這個位置是 ' + part + '。';
+    $('#structStatus').className = 'status bad';
+    setTimeout(()=>{ if(structState[part] === structPicked){ structState[part] = null; refreshStructChips(); } }, 900);
+  }
+  structPicked = null;
+  refreshStructChips();
+});
+$('#btnStructCheck').addEventListener('click', () => {
+  const ok = structState.shell === 'shell' && structState.skin === 'skin' && structState.nut === 'nut';
+  $$('#structArtWrap .target').forEach(t => {
+    const want = t.dataset.part;
+    t.classList.toggle('ok', structState[want] === want);
+    t.classList.toggle('bad', !!structState[want] && structState[want] !== want);
+  });
+  if(ok){
+    ding(); fanfare();
+    $('#structStatus').textContent = '🎉 全部正確！Shell, skin, nut.';
+    $('#structStatus').className = 'status ok';
+    toast('Shell, skin, nut — 你都找到了！');
+  }else{
+    buzz();
+    $('#structStatus').textContent = '還有位置沒放對，再試一次。';
+    $('#structStatus').className = 'status bad';
+  }
+});
+$('#btnStructReset').addEventListener('click', () => {
+  structState.shell = structState.skin = structState.nut = null;
+  structPicked = null; refreshStructChips();
+  $('#structStatus').textContent = '';
+  $('#structStatus').className = 'status';
+});
+
+/* ============================================================
+   感官觀察
+   ============================================================ */
+$$('#obsList input').forEach(cb => {
+  cb.addEventListener('change', () => {
+    cb.closest('label').classList.toggle('on', cb.checked);
+    if(cb.checked) sayPair(cb.dataset.say);
+  });
+});
+$$('#obsList [data-audio]').forEach(b => b.addEventListener('click', e => {
+  e.preventDefault(); e.stopPropagation();
+  sayPair(b.dataset.audio);
+}));
+
+/* ============================================================
+   品種比較
+   ============================================================ */
+const VAR_ANS = {color:'different', size:'different', inside:'different'};
+const varPick = {};
+function renderVariety(){
+  $('#vArtA').innerHTML = VARIETY_ART_A;
+  $('#vArtB').innerHTML = VARIETY_ART_B;
+}
+$$('.cmp .pick').forEach(b => b.addEventListener('click', () => {
+  const row = b.closest('.btns').dataset.row;
+  varPick[row] = b.dataset.val;
+  b.closest('.btns').querySelectorAll('.pick').forEach(x => x.classList.toggle('on', x === b));
+  speak(b.dataset.val, null);
+}));
+$('#btnVarCheck').addEventListener('click', () => {
+  let ok = true;
+  Object.keys(VAR_ANS).forEach(row => {
+    const btns = $(`.btns[data-row="${row}"]`);
+    btns.querySelectorAll('.pick').forEach(x => {
+      x.classList.remove('ok','bad');
+      if(x.classList.contains('on')){
+        const right = x.dataset.val === VAR_ANS[row];
+        x.classList.add(right ? 'ok' : 'bad');
+        if(!right) ok = false;
+      }
+    });
+    if(!varPick[row]) ok = false;
+  });
+  const sent = $('#vColor').value === 'different' && $('#vInside').value === 'different';
+  if(ok && sent){
+    ding(); fanfare();
+    $('#varStatus').textContent = '🎉 Great! 顏色、大小、裡面都不一樣。';
+    $('#varStatus').className = 'status ok';
+    toast('They look different outside and inside.');
+  }else{
+    buzz();
+    $('#varStatus').textContent = '再檢查一次：顏色、大小、裡面，各是哪一個？';
+    $('#varStatus').className = 'status bad';
+  }
+});
+$('#btnVarReset').addEventListener('click', () => {
+  Object.keys(varPick).forEach(k => delete varPick[k]);
+  $$('.cmp .pick').forEach(x => x.classList.remove('on','ok','bad'));
+  $('#vColor').value = ''; $('#vInside').value = '';
+  $('#varStatus').textContent = ''; $('#varStatus').className = 'status';
+});
+
+/* ============================================================
+   地下探險圖
+   ============================================================ */
+const SCENE_LABELS = [
+  {id:'flower', en:'flower', zh:'花'},
+  {id:'pods', en:'pods', zh:'莢'},
+  {id:'seed', en:'seed', zh:'種子'}
+];
+let scenePicked = null;
+const sceneState = {above:null, under:null};
+
+function renderScene(){
+  $('#sceneArt').innerHTML = SCENE_ART;
+  $('#sceneChips').innerHTML = SCENE_LABELS.map(l => `
+    <button class="chip" data-pick="${l.id}" type="button">${l.en} <small>${l.zh}</small></button>`).join('');
+}
+function refreshScene(){
+  const used = new Set(Object.values(sceneState).filter(Boolean));
+  $$('#sceneChips .chip').forEach(ch => {
+    ch.classList.toggle('used', used.has(ch.dataset.pick));
+    ch.classList.toggle('selected', scenePicked === ch.dataset.pick && !used.has(ch.dataset.pick));
+  });
+  $$('#sceneWrap .target').forEach(t => {
+    const id = sceneState[t.dataset.zone];
+    t.classList.toggle('ok', (t.dataset.zone==='above' && id==='flower') || (t.dataset.zone==='under' && id==='pods'));
+    t.innerHTML = id ? `<b>${id}<br><span style="font-size:10px">${SCENE_LABELS.find(x=>x.id===id).zh}</span></b>` : '<b>?</b>';
+  });
+  $('#svgFlower').classList.toggle('glow', sceneState.above === 'flower');
+  $('#svgPods').classList.toggle('glow', sceneState.under === 'pods');
+}
+$('#sceneChips').addEventListener('click', e => {
+  const ch = e.target.closest('.chip'); if(!ch) return;
+  scenePicked = ch.dataset.pick; refreshScene();
+  const l = SCENE_LABELS.find(x => x.id === scenePicked);
+  speak(l.en, l.zh);
+});
+$('#sceneWrap').addEventListener('click', e => {
+  const t = e.target.closest('.target'); if(!t) return;
+  const zone = t.dataset.zone;
+  if(sceneState[zone]){ sceneState[zone] = null; scenePicked = null; refreshScene(); return; }
+  if(!scenePicked){ toast('先點下面的字卡，再點這裡。'); return; }
+  sceneState[zone] = scenePicked;
+  const ok = (zone==='above' && scenePicked==='flower') || (zone==='under' && scenePicked==='pods');
+  speak(SCENE_LABELS.find(x=>x.id===scenePicked).en, null);
+  scenePicked = null;
+  refreshScene();
+  if(ok){ ding(); $('#sceneStatus').textContent = '答對了！再找另一個位置。'; $('#sceneStatus').className='status ok'; }
+  else{
+    buzz(); $('#sceneStatus').textContent = '再想想：花在地上，莢在土裡。'; $('#sceneStatus').className='status bad';
+    setTimeout(()=>{
+      const cur = sceneState[zone];
+      const right = (zone==='above' && cur==='flower') || (zone==='under' && cur==='pods');
+      if(cur && !right){ sceneState[zone] = null; refreshScene(); }
+    }, 1000);
+  }
+});
+$('#btnSceneCheck').addEventListener('click', () => {
+  const ok = sceneState.above === 'flower' && sceneState.under === 'pods';
+  const sent = $('#sAbove').value === 'above' && $('#sUnder').value === 'under';
+  if(ok && sent){
+    ding(); fanfare();
+    $('#sceneStatus').textContent = '🎉 找到祕密了：花在上，莢在下！';
+    $('#sceneStatus').className = 'status ok';
+    toast('The flowers are above. The pods are under.');
+  }else{
+    buzz();
+    $('#sceneStatus').textContent = '位置或句子還有一個不對，再試一次。';
+    $('#sceneStatus').className = 'status bad';
+  }
+});
+$('#btnSceneReset').addEventListener('click', () => {
+  sceneState.above = sceneState.under = null; scenePicked = null;
+  $('#sAbove').value = ''; $('#sUnder').value = '';
+  refreshScene();
+  $('#sceneStatus').textContent = ''; $('#sceneStatus').className = 'status';
+});
+$('#sAbove').addEventListener('change', () => speak($('#sAbove').value, null));
+$('#sUnder').addEventListener('change', () => speak($('#sUnder').value, null));
+
+/* ============================================================
+   數位小火車
+   ============================================================ */
+const trainState = {placed:Array(STAGES.length).fill(null), locked:false, selected:null};
+let poolOrder = shuffle(STAGES.map(s => s.id));
+function shuffle(a){
+  const b = a.slice();
+  for(let i=b.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [b[i],b[j]]=[b[j],b[i]]; }
+  return b;
+}
+function updateBar(){
+  const n = trainState.placed.filter(Boolean).length;
+  const bar = $('#trainBar'); if(bar) bar.style.width = (n/STAGES.length*100) + '%';
+}
+function renderTrain(){
+  const el = $('#trainLine');
+  el.innerHTML = `<div class="engine">${ENGINE_ART}<div class="lbl">PEANUT EXPRESS</div></div>` +
+    STAGES.map((s,i) => {
+      const id = trainState.placed[i];
+      const st = id ? STAGES.find(x => x.id === id) : null;
+      return `<div class="slot ${id?'filled':''}" data-i="${i}" data-n="${i+1}" role="button" tabindex="0" aria-label="第 ${i+1} 節車廂">
+        <span class="no">${i+1}</span>
+        ${st ? `<div class="car">${STAGE_ART[st.id]}<div class="e">${st.en}</div><div class="z">${st.zh}</div></div>` : ''}
+      </div>`;
+    }).join('');
+
+  const used = new Set(trainState.placed.filter(Boolean));
+  $('#pool').innerHTML = poolOrder.map(id => {
+    const s = STAGES.find(x => x.id === id);
+    return `<button class="stage-card ${used.has(id)?'used':''} ${trainState.selected===id?'selected':''}"
+      draggable="${!trainState.locked}" data-id="${id}" type="button" style="--gc:${GROUPS[s.group].color}"
+      aria-label="${s.en} ${s.zh}">
+      ${STAGE_ART[s.id]}
+      <div class="e en">${s.en}</div>
+      <div class="z">${s.zh}</div>
+      <div class="dot"></div>
+    </button>`;
+  }).join('');
+  const first = trainState.placed[0] ? STAGES.find(x => x.id === trainState.placed[0]) : null;
+  const next = trainState.placed[1] ? STAGES.find(x => x.id === trainState.placed[1]) : null;
+  $('#seqFirstLabel').textContent = first ? first.en : '______';
+  $('#seqNextLabel').textContent = next ? next.en : '______';
+  updateBar();
+}
+function placeStage(i, id){
+  if(trainState.locked) return;
+  const prev = trainState.placed.indexOf(id);
+  if(prev >= 0) trainState.placed[prev] = null;
+  trainState.placed[i] = id;
+  trainState.selected = null;
+  renderTrain();
+  const s = STAGES.find(x => x.id === id);
+  speak(s.en, s.zh);
+  $('#trainStatus').textContent = `第 ${i+1} 站放上了 ${s.en}（${s.zh}）。`;
+  $('#trainStatus').className = 'status';
+}
+$('#pool').addEventListener('click', e => {
+  const c = e.target.closest('.stage-card');
+  if(!c || trainState.locked || c.classList.contains('used')) return;
+  trainState.selected = c.dataset.id;
+  $$('#pool .stage-card').forEach(x => x.classList.toggle('selected', x === c));
+  const s = STAGES.find(x => x.id === c.dataset.id);
+  speak(s.en, s.zh);
+  $('#trainStatus').textContent = `已選 ${s.en}，再點一節車廂放上去。`;
+});
+$('#pool').addEventListener('dragstart', e => {
+  const c = e.target.closest('.stage-card');
+  if(!c || trainState.locked) return;
+  trainState.selected = c.dataset.id;
+  try{ e.dataTransfer.setData('text/plain', c.dataset.id); e.dataTransfer.effectAllowed = 'move'; }catch(err){}
+});
+$('#trainLine').addEventListener('click', e => {
+  const slot = e.target.closest('.slot');
+  if(!slot || trainState.locked) return;
+  const i = Number(slot.dataset.i);
+  if(trainState.placed[i]){
+    const s = STAGES.find(x => x.id === trainState.placed[i]);
+    trainState.placed[i] = null;
+    renderTrain();
+    $('#trainStatus').textContent = `拿下了 ${s.en}，再試一次。`;
+    return;
+  }
+  if(!trainState.selected){ toast('先點一張圖卡，再點車廂。'); return; }
+  placeStage(i, trainState.selected);
+});
+$('#trainLine').addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; });
+$('#trainLine').addEventListener('drop', e => {
+  e.preventDefault();
+  const slot = e.target.closest('.slot');
+  if(!slot) return;
+  let id = '';
+  try{ id = e.dataTransfer.getData('text/plain'); }catch(err){}
+  if(!id) id = trainState.selected;
+  if(id) placeStage(Number(slot.dataset.i), id);
+});
+$('#btnTrainCheck').addEventListener('click', () => {
+  let correct = 0, filled = 0;
+  trainState.placed.forEach((id, i) => {
+    const slot = $(`#trainLine .slot[data-i="${i}"]`);
+    if(!slot) return;
+    slot.classList.remove('ok','bad');
+    if(id){
+      filled++;
+      if(id === STAGES[i].id){ slot.classList.add('ok'); correct++; }
+      else slot.classList.add('bad');
+    }
+  });
+  if(correct === STAGES.length){
+    trainState.locked = true;
+    $('#trainLine').classList.add('go');
+    setTimeout(()=>$('#trainLine').classList.remove('go'), 1800);
+    ding(); fanfare(); confetti();
+    $('#trainStatus').textContent = '🎉 花生小火車出發！Peanut train, go go go!';
+    $('#trainStatus').className = 'status ok';
+    toast('八站全對！你是花生魔法師！');
+  }else{
+    buzz();
+    $('#trainStatus').textContent = `目前答對 ${correct}／8 站，還有 ${8-correct} 站要調整。`;
+    $('#trainStatus').className = 'status bad';
+    setTimeout(()=>{
+      $$('#trainLine .slot.bad').forEach(s => s.classList.remove('bad'));
+    }, 1600);
+  }
+});
+$('#btnTrainHint').addEventListener('click', () => {
+  const idx = trainState.placed.findIndex(x => !x);
+  if(idx < 0){ toast('八節車廂都滿了，按「檢查」看看。'); return; }
+  const s = STAGES[idx];
+  const card = $(`#pool .stage-card[data-id="${s.id}"]`);
+  if(card){ card.classList.add('hint'); setTimeout(()=>card.classList.remove('hint'), 2200); }
+  speak(s.en, s.zh);
+  $('#trainStatus').textContent = `提示：第 ${idx+1} 站是 ${s.en}（${s.zh}）。`;
+  $('#trainStatus').className = 'status';
+});
+$('#btnTrainReset').addEventListener('click', () => {
+  trainState.placed = Array(STAGES.length).fill(null);
+  trainState.locked = false; trainState.selected = null;
+  poolOrder = shuffle(STAGES.map(s => s.id));
+  renderTrain();
+  $('#trainStatus').textContent = '先放上第 1 站吧！';
+  $('#trainStatus').className = 'status';
+});
+$('#btnColorHint').addEventListener('click', () => {
+  const on = document.body.classList.toggle('colorhint');
+  $('#btnColorHint').classList.toggle('on', on);
+  $('#btnColorHint').setAttribute('aria-pressed', on ? 'true' : 'false');
+  toast(on ? '已顯示四階段顏色提示' : '已關閉顏色提示');
+});
+$('#btnTrainSeqSay').addEventListener('click', () => {
+  const first = trainState.placed[0] ? STAGES.find(x => x.id === trainState.placed[0]) : null;
+  const next = trainState.placed[1] ? STAGES.find(x => x.id === trainState.placed[1]) : null;
+  if(!first || !next){ toast('先把第 1、2 站放上車廂，再說一次。'); return; }
+  speakQueue([
+    ['First, ' + first.en + '.', 'en-US', .82],
+    ['首先，' + first.zh + '。', 'zh-TW', .9],
+    ['Next, ' + next.en + '.', 'en-US', .82],
+    ['接著，' + next.zh + '。', 'zh-TW', .9]
+  ]);
+  $('#trainStatus').textContent = `First, ${first.en}. Next, ${next.en}.`;
+  $('#trainStatus').className = 'status ok';
+});
+
+/* ============================================================
+   花生宣言：畫布、詞庫
+   ============================================================ */
+const cv = $('#doodle');
+const ctx = cv.getContext('2d');
+let penColor = '#5B3D22', penSize = 5, drawing = false, lastPt = null;
+
+function resizeCanvas(){
+  const rect = cv.getBoundingClientRect();
+  if(rect.width < 10) return;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const tmp = document.createElement('canvas');
+  tmp.width = cv.width; tmp.height = cv.height;
+  if(cv.width && cv.height) tmp.getContext('2d').drawImage(cv, 0, 0);
+  cv.width = Math.round(rect.width * dpr);
+  cv.height = Math.round(rect.height * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  if(tmp.width && tmp.height){
+    ctx.drawImage(tmp, 0, 0, tmp.width, tmp.height, 0, 0, rect.width, rect.height);
+  }
+  ctx.strokeStyle = penColor; ctx.lineWidth = penSize;
+}
+function canvasPos(e){
+  const r = cv.getBoundingClientRect();
+  return {x: e.clientX - r.left, y: e.clientY - r.top};
+}
+cv.addEventListener('pointerdown', e => {
+  drawing = true; lastPt = canvasPos(e);
+  try{ cv.setPointerCapture(e.pointerId); }catch(err){}
+  ctx.beginPath(); ctx.arc(lastPt.x, lastPt.y, penSize/2, 0, Math.PI*2); ctx.fillStyle = penColor; ctx.fill();
+});
+cv.addEventListener('pointermove', e => {
+  if(!drawing) return;
+  const p = canvasPos(e);
+  ctx.strokeStyle = penColor; ctx.lineWidth = penSize;
+  ctx.beginPath(); ctx.moveTo(lastPt.x, lastPt.y); ctx.lineTo(p.x, p.y); ctx.stroke();
+  lastPt = p;
+});
+['pointerup','pointercancel','pointerleave'].forEach(ev => cv.addEventListener(ev, () => { drawing = false; lastPt = null; }));
+
+$$('#palette .swatch').forEach(b => b.addEventListener('click', () => {
+  $$('#palette .swatch').forEach(x => x.classList.toggle('on', x === b));
+  penColor = b.dataset.color;
+  if(penColor === '#FDFBF6'){ ctx.strokeStyle = penColor; ctx.lineWidth = Math.max(penSize, 14); }
+}));
+$('#penSize').addEventListener('input', e => { penSize = Number(e.target.value); });
+$('#btnClearDoodle').addEventListener('click', () => {
+  ctx.clearRect(0, 0, cv.width, cv.height);
+  toast('畫布清空了');
+});
+
+$$('#wordbank .wb').forEach(b => b.addEventListener('click', () => {
+  const ta = $('#speech');
+  const start = ta.selectionStart ?? ta.value.length;
+  const end = ta.selectionEnd ?? ta.value.length;
+  const word = b.dataset.word;
+  ta.value = ta.value.slice(0, start) + word + ta.value.slice(end);
+  ta.focus();
+  ta.selectionStart = ta.selectionEnd = start + word.length;
+  speak(word, null);
+}));
+
+$('#btnTTS').addEventListener('click', () => {
+  ttsOn = !ttsOn;
+  $('#btnTTS').classList.toggle('on', ttsOn);
+  $('#btnTTS').textContent = ttsOn ? '🔊 語音 開' : '🔇 語音 關';
+  $('#btnTTS').setAttribute('aria-pressed', ttsOn ? 'true' : 'false');
+  if(!ttsOn && 'speechSynthesis' in window) speechSynthesis.cancel();
+  if(ttsOn) speak('Hello, peanut magician!', '你好，花生魔法師！');
+});
+
+/* 全域音訊按鈕 */
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-audio]');
+  if(!b) return;
+  e.preventDefault(); e.stopPropagation();
+  sayPair(b.dataset.audio);
+});
+
+/* 切到畫布頁時重新量尺寸 */
+const _goTab = goTab;
+goTab = function(name){
+  _goTab(name);
+  if(name === 'voice') setTimeout(resizeCanvas, 60);
+};
+
+/* 紙本小火車圖卡（列印用） */
+function renderPrintCut(){
+  const el = $('#printCut'); if(!el) return;
+  el.innerHTML = shuffle(STAGES.map(s => s.id)).map(id => {
+    const s = STAGES.find(x => x.id === id);
+    return `<div class="cut">
+      ${STAGE_ART[s.id]}
+      <div class="e en">${s.en}</div>
+      <div class="z">${s.zh}</div>
+    </div>`;
+  }).join('');
+}
+
+/* 讓鍵盤也能操作虛線圈 */
+document.addEventListener('keydown', e => {
+  if(e.key !== 'Enter' && e.key !== ' ') return;
+  const t = e.target.closest ? e.target.closest('.target') : null;
+  if(t){ e.preventDefault(); t.click(); }
+});
+
+/* 初始化 */
+renderCards();
+renderStruct();
+refreshStructChips();
+renderVariety();
+renderScene();
+refreshScene();
+renderTrain();
+renderPrintCut();
+resizeCanvas();
+window.addEventListener('resize', () => { clearTimeout(window.__rz); window.__rz = setTimeout(resizeCanvas, 180); });
+
+/* 首次互動時喚醒音訊 */
+document.addEventListener('pointerdown', function once(){
+  try{ audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)(); if(audioCtx.state==='suspended') audioCtx.resume(); }catch(e){}
+  document.removeEventListener('pointerdown', once);
+}, {once:true});
+</script>
+</body>
+</html>
